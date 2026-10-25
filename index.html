@@ -41,7 +41,7 @@
         </div>
         <div>
           <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulados</h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Contas salvas no GitHub</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Login por senha salvo neste navegador</p>
         </div>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
@@ -59,60 +59,47 @@
 
   <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- TELA: CARREGANDO -->
-    <section id="view-load" class="py-24 text-center text-sm text-slate-500 dark:text-slate-400">
-      <i data-lucide="loader-2" class="w-6 h-6 mx-auto mb-3 animate-spin"></i>
-      Carregando…
-    </section>
-
-    <!-- TELA: ENTRAR / CRIAR CONTA -->
+    <!-- TELA: LOGIN / CRIAR PRIMEIRA SENHA -->
     <section id="view-auth" class="hidden">
       <div class="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700">
-        <div class="text-center mb-5">
+        <div class="text-center mb-6">
           <div class="inline-flex p-4 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400 mb-3">
-            <i data-lucide="user-round" class="w-10 h-10"></i>
+            <i id="auth-icon" data-lucide="lock" class="w-10 h-10"></i>
           </div>
           <h2 id="auth-title" class="text-2xl font-extrabold text-slate-900 dark:text-white">Entrar</h2>
-          <p id="auth-subtitle" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Entre com seu usuário e senha.</p>
+          <p id="auth-subtitle" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Digite sua senha para acessar.</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-1 p-1 mb-5 rounded-xl bg-slate-100 dark:bg-slate-900/60">
-          <button id="tab-login" type="button" onclick="setAuthMode('login')" class="py-2 text-sm font-semibold rounded-lg transition-all">Entrar</button>
-          <button id="tab-signup" type="button" onclick="setAuthMode('signup')" class="py-2 text-sm font-semibold rounded-lg transition-all">Criar conta</button>
-        </div>
-
-        <form id="auth-form" class="space-y-4" autocomplete="on">
-          <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Usuário</label>
-            <input id="acc-user" type="text" maxlength="24" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="ex.: maria" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
-            <p id="user-hint" class="hidden text-xs text-slate-500 dark:text-slate-400 mt-1">3 a 24 caracteres: letras, números, ponto, hífen e _.</p>
+        <form id="auth-form" class="space-y-4" autocomplete="off">
+          <!-- Nome (somente na criação da primeira senha) -->
+          <div id="auth-name-wrap" class="hidden">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Nome da senha</label>
+            <input id="auth-name" type="text" maxlength="40" placeholder="Ex.: Principal, Pessoal..." class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
           </div>
+
           <div>
             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Senha</label>
             <div class="relative">
-              <input id="acc-pass" type="password" maxlength="100" autocomplete="current-password" placeholder="••••••••" class="w-full pl-4 pr-11 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
-              <button type="button" onclick="togglePass('acc-pass', this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              <input id="auth-pass" type="password" placeholder="••••••••" class="w-full pl-4 pr-11 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+              <button type="button" onclick="togglePass('auth-pass', this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                 <i data-lucide="eye" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
-          <div id="confirm-wrap" class="hidden">
+
+          <div id="auth-confirm-wrap" class="hidden">
             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Confirmar senha</label>
-            <input id="acc-pass2" type="password" maxlength="100" autocomplete="new-password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Mínimo de 6 caracteres.</p>
+            <input id="auth-pass2" type="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
           </div>
 
-          <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 cursor-pointer select-none">
-            <input id="acc-remember" type="checkbox" checked class="w-4 h-4 rounded accent-sky-600">
-            Manter conectado neste aparelho
+          <label id="auth-remember-wrap" class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 cursor-pointer select-none">
+            <input id="auth-remember" type="checkbox" checked class="w-4 h-4 rounded accent-sky-600">
+            Manter conectado neste navegador
           </label>
 
           <p id="auth-error" class="hidden text-sm font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 rounded-xl px-3 py-2"></p>
-          <p id="auth-config" class="hidden text-sm font-medium text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl px-3 py-2">
-            O servidor de contas ainda não foi configurado. Defina a URL em <strong>API_URL</strong> (veja o LEIA-ME).
-          </p>
 
-          <button id="auth-submit" type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+          <button id="auth-submit" type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
             <i data-lucide="log-in" class="w-4 h-4"></i>
             <span id="auth-submit-text">Entrar</span>
           </button>
@@ -122,20 +109,68 @@
 
     <!-- TELA: PAINEL (após login) -->
     <section id="view-app" class="hidden space-y-6">
+
+      <!-- Boas-vindas -->
       <div id="account-card" role="button" tabindex="0" onclick="openChooser()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openChooser();}" class="cursor-pointer bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 hover:border-brand-500 hover:shadow-md active:scale-[0.99] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
           <div class="p-3 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-            <i data-lucide="user-check" class="w-7 h-7"></i>
+            <i data-lucide="unlock" class="w-7 h-7"></i>
           </div>
           <div>
-            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">Olá, <span id="acc-name" class="text-brand-600 dark:text-brand-400"></span>!</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Sua conta está salva. <span class="text-brand-600 dark:text-brand-400 font-medium">Toque aqui para escolher um simulado.</span></p>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">Acesso liberado</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Você entrou com a senha <strong id="current-name" class="text-brand-600 dark:text-brand-400"></strong>. <span class="text-brand-600 dark:text-brand-400 font-medium">Toque aqui para escolher um simulado.</span></p>
           </div>
         </div>
-        <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-600 text-white text-xs sm:text-sm font-semibold shadow-md shrink-0 w-fit">
-          <i data-lucide="graduation-cap" class="w-4 h-4"></i>
-          <span>Abrir simulados</span>
-          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <div class="flex items-center justify-between sm:justify-end gap-4">
+          <div class="text-xs text-slate-500 dark:text-slate-400 sm:text-right">
+            <div>Último acesso anterior:</div>
+            <div id="prev-login" class="font-semibold text-slate-700 dark:text-slate-300">—</div>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-brand-600 text-white text-xs sm:text-sm font-semibold shadow-md shrink-0">
+            <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+            <span>Abrir simulados</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+        <!-- Lista de senhas -->
+        <div class="lg:col-span-3 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="key-round" class="w-5 h-5 text-brand-500"></i>
+              Senhas cadastradas
+            </h3>
+            <span id="count-badge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300">0</span>
+          </div>
+          <div id="pass-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Nova senha -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 h-fit">
+          <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+            <i data-lucide="plus-circle" class="w-5 h-5 text-brand-500"></i>
+            Criar nova senha
+          </h3>
+          <form id="new-form" class="space-y-3" autocomplete="off">
+            <input id="new-name" type="text" maxlength="40" placeholder="Nome (ex.: Trabalho, Família)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            <div class="relative">
+              <input id="new-pass" type="password" placeholder="Nova senha (mín. 4 caracteres)" class="w-full pl-4 pr-11 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+              <button type="button" onclick="togglePass('new-pass', this)" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+            <input id="new-pass2" type="password" placeholder="Confirmar nova senha" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            <p id="new-msg" class="hidden text-sm font-medium rounded-xl px-3 py-2"></p>
+            <button type="submit" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-sm">
+              <i data-lucide="plus" class="w-4 h-4"></i> Adicionar senha
+            </button>
+          </form>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">
+            Qualquer uma das senhas cadastradas libera o acesso. Elas ficam salvas apenas neste navegador, em formato criptografado (hash), nunca em texto puro.
+          </p>
         </div>
       </div>
     </section>
@@ -2905,66 +2940,52 @@
 </html></script>
 
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
-    <p>Sua conta fica salva no GitHub. Este aparelho guarda apenas a sessão, se você marcar "Manter conectado".</p>
+    <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
 
   <script>
-    // ================== CONTAS (servidor + GitHub) ==================
-    const API_URL = "https://raspy-cloud-6310.milaneznycoprime-c83.workers.dev/";   // <-- cole aqui a URL do seu Worker da Cloudflare (ex.: https://simulados.seunome.workers.dev)
-    const SESSION_KEY = 'conta_sessao_v1';
-    const API_KEY = 'api_url_v1';
-    let authMode = 'login';
-    let currentUser = null;
+    // ================== ARMAZENAMENTO ==================
+    const STORE_KEY = 'acesso_senhas_v1';
+    const SESSION_KEY = 'acesso_sessao_v1';
 
-    function apiBase() {
-      try {
-        const q = new URLSearchParams(location.search).get('api');   // atalho p/ testar: ?api=https://...
-        if (q && /^https:\/\//.test(q)) { localStorage.setItem(API_KEY, q); history.replaceState(null, '', location.pathname); }
-      } catch (e) {}
-      let v = API_URL;
-      if (!v) { try { v = localStorage.getItem(API_KEY) || ''; } catch (e) {} }
-      return String(v || '').replace(/\/+$/, '');
+    function loadPasswords() {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch (e) { return []; }
     }
-    function pyReady() {
-      return new Promise(res => {
-        if (!window.__DESKTOP__ || (window.pywebview && window.pywebview.api)) return res();
-        window.addEventListener('pywebviewready', () => res());
-        setTimeout(res, 2000);
-      });
+    function savePasswords(list) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) { alert('Não foi possível salvar no navegador.'); }
     }
-    async function apiCall(method, path, body, token) {
-      const base = apiBase();
-      if (!base) throw new Error('Servidor de contas não configurado.');
-      const headers = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = 'Bearer ' + token;
-      const payload = body ? JSON.stringify(body) : null;
-      let status = 0, text = '';
-      await pyReady();
-      const py = window.pywebview && window.pywebview.api;
-      if (py && py.http) {
-        const r = await py.http(method, base + path, headers, payload);   // app: o Python faz a chamada
-        status = r.status; text = r.text;
-      } else {
-        try {
-          const r = await fetch(base + path, { method, headers, body: payload || undefined, cache: 'no-store' });
-          status = r.status; text = await r.text();
-        } catch (e) { throw new Error('Sem conexão com o servidor.'); }
+
+    // ================== HASH ==================
+    function toHex(buf) { return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join(''); }
+    function randomSalt() {
+      const arr = new Uint8Array(16);
+      (window.crypto || {}).getRandomValues ? crypto.getRandomValues(arr) : arr.forEach((_, i) => arr[i] = Math.floor(Math.random() * 256));
+      return toHex(arr);
+    }
+    async function hashPassword(password, salt) {
+      if (window.crypto && crypto.subtle) {
+        const data = new TextEncoder().encode(salt + ':' + password);
+        let digest = await crypto.subtle.digest('SHA-256', data);
+        // Reforço: várias rodadas
+        for (let i = 0; i < 5000; i++) digest = await crypto.subtle.digest('SHA-256', digest);
+        return toHex(digest);
       }
-      let j = {}; try { j = JSON.parse(text); } catch (e) {}
-      if (status === 0) throw new Error('Sem conexão com o servidor.');
-      if (status < 200 || status >= 300) { const err = new Error(j.error || ('Erro ' + status)); err.status = status; throw err; }
-      return j;
+      // Fallback simples (ambientes sem WebCrypto)
+      let h = 5381; const s = salt + ':' + password;
+      for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+      return 'fb' + (h >>> 0).toString(16);
     }
+    function newId() { return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
-    // ---- sessão ----
+    // ================== SESSÃO ==================
     function getSession() {
       try {
         const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
         return raw ? JSON.parse(raw) : null;
       } catch (e) { return null; }
     }
-    function setSession(token, user, remember) {
-      const data = JSON.stringify({ token, user });
+    function setSession(passId, remember) {
+      const data = JSON.stringify({ passId, at: Date.now() });
       try {
         localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY);
         (remember ? localStorage : sessionStorage).setItem(SESSION_KEY, data);
@@ -3036,80 +3057,181 @@
     }
 
     // ================== TELAS ==================
-    function hideAllViews() {
-      ['view-load', 'view-auth', 'view-app'].forEach(id => $(id).classList.add('hidden'));
+    let currentPassId = null;
+    let previousLogin = null;
+
+    function route() {
+      const list = loadPasswords();
+      const session = getSession();
+      const valid = session && list.find(p => p.id === session.passId);
+
+      if (valid) {
+        currentPassId = valid.id;
+        showApp();
+      } else {
+        clearSession();
+        showAuth(list.length === 0);
+      }
     }
-    function setAuthMode(mode) {
-      authMode = mode;
-      const signup = mode === 'signup';
-      $('confirm-wrap').classList.toggle('hidden', !signup);
-      $('user-hint').classList.toggle('hidden', !signup);
-      $('auth-title').textContent = signup ? 'Criar conta' : 'Entrar';
-      $('auth-subtitle').textContent = signup ? 'Escolha um usuário e uma senha. Sua conta fica salva no GitHub.' : 'Entre com seu usuário e senha.';
-      $('auth-submit-text').textContent = signup ? 'Criar conta e entrar' : 'Entrar';
-      $('acc-pass').autocomplete = signup ? 'new-password' : 'current-password';
-      const on = 'bg-white dark:bg-slate-700 text-brand-700 dark:text-white shadow-sm';
-      const off = 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200';
-      $('tab-login').className = 'py-2 text-sm font-semibold rounded-lg transition-all ' + (signup ? off : on);
-      $('tab-signup').className = 'py-2 text-sm font-semibold rounded-lg transition-all ' + (signup ? on : off);
-      $('auth-error').classList.add('hidden');
-    }
-    function showAuth(msg) {
-      hideAllViews();
+
+    function showAuth(firstTime) {
+      $('view-app').classList.add('hidden');
       $('view-auth').classList.remove('hidden');
-      $('btn-logout').classList.add('hidden'); $('btn-logout').classList.remove('flex');
-      $('auth-config').classList.toggle('hidden', !!apiBase());
-      setAuthMode(authMode);
-      if (msg) { $('auth-error').textContent = msg; $('auth-error').classList.remove('hidden'); }
+      $('btn-logout').classList.add('hidden');
+      $('btn-logout').classList.remove('flex');
+      $('auth-error').classList.add('hidden');
+      $('auth-pass').value = ''; $('auth-pass2').value = ''; $('auth-name').value = '';
+
+      $('auth-name-wrap').classList.toggle('hidden', !firstTime);
+      $('auth-confirm-wrap').classList.toggle('hidden', !firstTime);
+      $('auth-title').textContent = firstTime ? 'Criar primeira senha' : 'Entrar';
+      $('auth-subtitle').textContent = firstTime
+        ? 'Defina uma senha para proteger o acesso. Ela ficará salva neste navegador.'
+        : 'Digite sua senha para acessar.';
+      $('auth-submit-text').textContent = firstTime ? 'Criar senha e entrar' : 'Entrar';
+      $('auth-form').dataset.mode = firstTime ? 'create' : 'login';
+      $('auth-icon').setAttribute('data-lucide', firstTime ? 'key-round' : 'lock');
       lucide.createIcons();
+      setTimeout(() => (firstTime ? $('auth-name') : $('auth-pass')).focus(), 50);
     }
+
     function showApp() {
-      hideAllViews();
+      $('view-auth').classList.add('hidden');
       $('view-app').classList.remove('hidden');
-      $('acc-name').textContent = currentUser;
-      $('btn-logout').classList.remove('hidden'); $('btn-logout').classList.add('flex');
+      $('btn-logout').classList.remove('hidden');
+      $('btn-logout').classList.add('flex');
+      renderApp();
+    }
+
+    function renderApp() {
+      const list = loadPasswords();
+      const me = list.find(p => p.id === currentPassId);
+      $('current-name').textContent = me ? me.name : '';
+      $('prev-login').textContent = previousLogin === null ? 'sessão restaurada' : fmtDate(previousLogin);
+      $('count-badge').textContent = list.length;
+
+      let html = '';
+      list.forEach(p => {
+        const isMe = p.id === currentPassId;
+        html += `
+          <div class="p-4 rounded-xl border ${isMe ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-900/20' : 'border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50'} flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="p-2 rounded-lg ${isMe ? 'bg-brand-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}">
+                <i data-lucide="key" class="w-4 h-4"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-semibold text-sm truncate">${esc(p.name)} ${isMe ? '<span class="ml-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">em uso</span>' : ''}</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400">Criada em ${fmtDate(p.createdAt)} · Último uso: ${fmtDate(p.lastUsed)}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button onclick="renamePassword('${p.id}')" class="p-2 text-slate-400 hover:text-brand-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700" title="Renomear">
+                <i data-lucide="pencil" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deletePassword('${p.id}')" class="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700" title="Excluir">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>`;
+      });
+      $('pass-list').innerHTML = html;
       lucide.createIcons();
     }
 
     // ================== AÇÕES ==================
     $('auth-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const err = $('auth-error'), btn = $('auth-submit');
-      err.classList.add('hidden');
-      const username = $('acc-user').value.trim().toLowerCase();
-      const password = $('acc-pass').value;
-      const signup = authMode === 'signup';
-      const fail = (m) => { err.textContent = m; err.classList.remove('hidden'); };
+      const errEl = $('auth-error');
+      errEl.classList.add('hidden');
+      const mode = $('auth-form').dataset.mode;
+      const pass = $('auth-pass').value;
+      const remember = $('auth-remember').checked;
 
-      if (!username || !password) return fail('Preencha usuário e senha.');
-      if (signup) {
-        if (!/^[a-z0-9_.-]{3,24}$/.test(username)) return fail('Usuário: 3 a 24 caracteres, só letras, números, ponto, hífen e _.');
-        if (password.length < 6) return fail('A senha precisa ter pelo menos 6 caracteres.');
-        if (password !== $('acc-pass2').value) return fail('As senhas não coincidem.');
-      }
-      btn.disabled = true;
-      $('auth-submit-text').textContent = signup ? 'Criando conta…' : 'Entrando…';
       try {
-        const r = await apiCall('POST', signup ? '/signup' : '/login', { username, password });
-        currentUser = r.user;
-        setSession(r.token, r.user, $('acc-remember').checked);
-        $('acc-pass').value = ''; $('acc-pass2').value = '';
-        showApp();
-      } catch (ex) {
-        fail(ex.message);
-      } finally {
-        btn.disabled = false;
-        $('auth-submit-text').textContent = signup ? 'Criar conta e entrar' : 'Entrar';
+        if (mode === 'create') {
+          const name = $('auth-name').value.trim() || 'Principal';
+          if (pass.length < 4) return fail('A senha precisa ter pelo menos 4 caracteres.');
+          if (pass !== $('auth-pass2').value) return fail('As senhas não coincidem.');
+          const salt = randomSalt();
+          const entry = { id: newId(), name, salt, hash: await hashPassword(pass, salt), createdAt: Date.now(), lastUsed: Date.now() };
+          savePasswords([entry]);
+          previousLogin = null;
+          currentPassId = entry.id;
+          setSession(entry.id, remember);
+          showApp();
+        } else {
+          if (!pass) return fail('Digite a senha.');
+          const list = loadPasswords();
+          let found = null;
+          for (const p of list) {
+            if (await hashPassword(pass, p.salt) === p.hash) { found = p; break; }
+          }
+          if (!found) return fail('Senha incorreta.');
+          previousLogin = found.lastUsed || null;
+          found.lastUsed = Date.now();
+          savePasswords(list);
+          currentPassId = found.id;
+          setSession(found.id, remember);
+          showApp();
+        }
+      } catch (err) {
+        fail('Erro inesperado: ' + err.message);
       }
+
+      function fail(msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
     });
+
+    $('new-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('new-msg');
+      const name = $('new-name').value.trim();
+      const pass = $('new-pass').value;
+      if (!name) return showMsg(msg, 'Dê um nome para a senha.', false);
+      if (pass.length < 4) return showMsg(msg, 'A senha precisa ter pelo menos 4 caracteres.', false);
+      if (pass !== $('new-pass2').value) return showMsg(msg, 'As senhas não coincidem.', false);
+
+      const list = loadPasswords();
+      for (const p of list) {
+        if (await hashPassword(pass, p.salt) === p.hash) return showMsg(msg, 'Essa senha já está cadastrada.', false);
+      }
+      const salt = randomSalt();
+      list.push({ id: newId(), name, salt, hash: await hashPassword(pass, salt), createdAt: Date.now(), lastUsed: null });
+      savePasswords(list);
+      $('new-form').reset();
+      showMsg(msg, 'Senha "' + name + '" criada com sucesso!', true);
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+      renderApp();
+    });
+
+    function renamePassword(id) {
+      const list = loadPasswords();
+      const p = list.find(x => x.id === id);
+      if (!p) return;
+      const name = prompt('Novo nome para a senha:', p.name);
+      if (name && name.trim()) { p.name = name.trim().slice(0, 40); savePasswords(list); renderApp(); }
+    }
+
+    function deletePassword(id) {
+      const list = loadPasswords();
+      if (list.length <= 1) { alert('Mantenha ao menos uma senha cadastrada.'); return; }
+      const p = list.find(x => x.id === id);
+      if (!p) return;
+      const isMe = id === currentPassId;
+      const text = isMe
+        ? `Excluir a senha "${p.name}" que você está usando agora? Você será desconectado.`
+        : `Excluir a senha "${p.name}"?`;
+      if (!confirm(text)) return;
+      savePasswords(list.filter(x => x.id !== id));
+      if (isMe) logout(); else renderApp();
+    }
 
     function logout() {
       try { closeChooser(); $('sim-viewer').classList.add('hidden'); $('sim-viewer').classList.remove('flex'); clearFrame(); document.body.style.overflow = ''; } catch (e) {}
       clearSession();
-      currentUser = null;
-      authMode = 'login';
-      showAuth();
+      currentPassId = null;
+      route();
     }
+
 
     // ================== SIMULADOS ==================
     const SIMULADOS = [
@@ -3171,22 +3293,7 @@
       if (e.key === 'Escape' && !$('chooser-modal').classList.contains('hidden')) closeChooser();
     });
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      lucide.createIcons();
-      const s = getSession();
-      if (s && s.token && apiBase()) {
-        try {
-          const r = await apiCall('GET', '/me', null, s.token);
-          currentUser = r.user;
-          showApp();
-        } catch (e) {
-          if (e.status === 401) { clearSession(); showAuth(); }
-          else showAuth('Não foi possível confirmar sua sessão (' + e.message + '). Entre novamente.');
-        }
-        return;
-      }
-      showAuth();
-    });
+    document.addEventListener('DOMContentLoaded', () => { route(); lucide.createIcons(); });
   </script>
 </body>
 </html>
