@@ -2939,6 +2939,694 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-baile"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: O Baile do Fim do Mundo</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+          <i data-lucide="party-popper" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: O Baile do Fim do Mundo</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">15 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo da História</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 15 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (15)</button>
+      <button onclick="filterByTopic('personagens')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="personagens">Personagens e Cenário (Q1-Q5)</button>
+      <button onclick="filterByTopic('enredo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="enredo">Enredo (Q6-Q10)</button>
+      <button onclick="filterByTopic('linguagem')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="linguagem">Linguagem e Humor (Q11-Q15)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-15)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: O Baile do Fim do Mundo</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. A cidadezinha e a protagonista</h3>
+          <p>Fim do Mundo é uma cidade tão pequena que nem existe no mapa. Lá mora dona Maria Auxiliadora, a Xilinha, de 67 anos, numa casa de varanda cheia de samambaias perto da estação de trem. Ela é "carola-carnavalesca": vai à missa e comunga, mas adora carnaval.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. O segredo da fantasia</h3>
+          <p>Xilinha decide concorrer ao concurso de fantasias do Clube Império Findomundense, na categoria originalidade. Dona Zenaide, a professora, tenta convencê-la a desistir, e os netos Bia e Alfredo tentam descobrir a fantasia espiando pelo buraco da fechadura, mas a avó o entupiu com papel.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. O desfile e o mal-entendido</h3>
+          <p>No baile, Xilinha aparece vestida de galinha-d'angola e fica em último lugar, mas radiante. Ela garantia não pecar contra a "luxúria", porém confundia a palavra com "luxo". O humor do texto nasce desse engano de vocabulário.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "O Baile do Fim do Mundo".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/15</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no texto <strong>"O Baile do Fim do Mundo"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+      // PERSONAGENS E CENÁRIO (Q1 - Q5)
+      {
+        id: 1, topic: 'personagens',
+        question: "Qual é o nome completo (de batismo) da personagem conhecida como dona Xilinha?",
+        options: ["A) Maria das Dores", "B) Maria Auxiliadora", "C) Maria Aparecida", "D) Maria Conceição"],
+        answer: 1,
+        comment: "O narrador apresenta a personagem como \"dona Maria Auxiliadora, de apelido Xilinha\". Xilinha é, portanto, o apelido; Maria Auxiliadora é o nome."
+      },
+      {
+        id: 2, topic: 'personagens',
+        question: "Como o narrador descreve a cidadezinha de Fim do Mundo logo no início do texto?",
+        options: [
+          "A) Uma grande capital turística, famosa pelo carnaval",
+          "B) Uma cidade portuária muito movimentada",
+          "C) Uma cidade tão pequena que nem existe no mapa, ficando muito longe, depois das montanhas",
+          "D) Uma cidade vizinha de Praga, na Europa"
+        ],
+        answer: 2,
+        comment: "O texto diz que, depois das montanhas azuladas, a cidade é \"tão inhazinha, tão nadinha, que nem existe no mapa\". O uso de diminutivos reforça a ideia de lugar minúsculo e remoto, e o próprio nome (Fim do Mundo) já adianta esse tom bem-humorado."
+      },
+      {
+        id: 3, topic: 'personagens',
+        question: "O narrador diz que dona Xilinha tem \"duas vocações tão diferentes\". Quais são elas?",
+        options: [
+          "A) Carola (muito religiosa) e carnavalesca (apaixonada por carnaval)",
+          "B) Costureira e professora",
+          "C) Cantora e cabeleireira",
+          "D) Dona de casa e comerciante"
+        ],
+        answer: 0,
+        comment: "Xilinha é \"carnavalesca de coração, mas tem mania de ser carola também\". Por isso o narrador cria a expressão \"carola-carnavalesca\", que resume o conflito entre a vida religiosa e o gosto pela folia e é a base do humor do texto."
+      },
+      {
+        id: 4, topic: 'personagens',
+        question: "Quem é dona Zenaide e qual é a sua atitude diante da participação de Xilinha no concurso?",
+        options: [
+          "A) A costureira do clube, que ajuda Xilinha a terminar a fantasia",
+          "B) A madrinha dos netos, que apoia a ideia com entusiasmo",
+          "C) A professora, muito religiosa e moralista, que tenta convencer Xilinha a não participar",
+          "D) A presidente do clube, que organiza o concurso de fantasias"
+        ],
+        answer: 2,
+        comment: "Dona Zenaide é apresentada como \"a professora\". Ela questiona Xilinha várias vezes (inclusive com o terço bento pelo padre Herculino), pois considera o baile um \"símbolo da luxúria\". Seu moralismo contrasta com a alegria de Xilinha."
+      },
+      {
+        id: 5, topic: 'personagens',
+        question: "Quais são os nomes dos netos de dona Xilinha que tentam descobrir o segredo da fantasia?",
+        options: ["A) Ana e Carlos", "B) Bia e Pedro", "C) Bela e Alfredo", "D) Bia e Alfredo"],
+        answer: 3,
+        comment: "Os netos são Bia e Alfredo. Eles aparecem curiosos (e, no caso de Alfredo, envergonhados) com a fantasia misteriosa da avó e tentam espiar o quarto de costura."
+      },
+
+      // ENREDO (Q6 - Q10)
+      {
+        id: 6, topic: 'enredo',
+        question: "Em qual categoria do concurso dona Xilinha pretendia concorrer?",
+        options: ["A) Luxo", "B) Superluxo", "C) Originalidade", "D) Luxúria"],
+        answer: 2,
+        comment: "Xilinha afirma que sua fantasia é simples e que vai concorrer \"na categoria de originalidade\". As categorias citadas no desfile são luxo, superluxo e originalidade; \"luxúria\" não é categoria de concurso e é a palavra que ela confunde com \"luxo\"."
+      },
+      {
+        id: 7, topic: 'enredo',
+        question: "Onde e como dona Xilinha costurava a fantasia em segredo?",
+        options: [
+          "A) Na sala de jantar, com a ajuda dos netos",
+          "B) Trancada no quarto de costura, pedalando a velha máquina Singer, relíquia de seu enxoval de casamento",
+          "C) Na casa de dona Zenaide, às escondidas",
+          "D) Nos fundos do clube, junto com a cantora de serestas"
+        ],
+        answer: 1,
+        comment: "Todas as tardes, por volta das três horas, Xilinha se trancava no quarto de costura e ficava \"tleque-tleque\" na máquina Singer. A onomatopeia dá vida à cena e o armário e o baú trancados ajudam a criar o clima de mistério."
+      },
+      {
+        id: 8, topic: 'enredo',
+        question: "O que os netos descobriram quando resolveram espiar pelo buraco da fechadura do quarto de costura?",
+        options: [
+          "A) Viram a fantasia inteira pendurada num cabide",
+          "B) Viram a avó dormindo sobre a máquina",
+          "C) Viram dona Zenaide conversando com a avó",
+          "D) Descobriram que a avó tinha entupido o buraco da fechadura com papel"
+        ],
+        answer: 3,
+        comment: "Bia olhou primeiro e depois Alfredo; nenhum viu nada, pois \"a vovó Xilinha entupiu o buraco da fechadura com papel\". O episódio mostra que a avó previu a curiosidade dos netos e reforça o suspense."
+      },
+      {
+        id: 9, topic: 'enredo',
+        question: "De que Xilinha se fantasiou no desfile do Clube Império Findomundense?",
+        options: [
+          "A) De \"Sereia Imperial\"",
+          "B) De \"Uma noite em Bagdá\"",
+          "C) De galinha-d'angola",
+          "D) De rainha do carnaval"
+        ],
+        answer: 2,
+        comment: "No palco, \"apareceu uma enorme galinha-d'angola\" com a cara de dona Xilinha. \"Uma noite em Bagdá\" foi a fantasia do cabeleireiro e \"Sereia Imperial\" a da cantora de serestas, ambos nas categorias de luxo."
+      },
+      {
+        id: 10, topic: 'enredo',
+        question: "Qual foi o resultado de dona Xilinha no concurso de fantasias e como ela reagiu?",
+        options: [
+          "A) Ficou em último lugar, mas se sentiu feliz e radiante",
+          "B) Ganhou o primeiro lugar e o prêmio de originalidade",
+          "C) Foi desclassificada e saiu envergonhada",
+          "D) Ficou em segundo lugar e reclamou do júri"
+        ],
+        answer: 0,
+        comment: "O narrador afirma: \"Ganhou o último lugar, mas ficou feliz\". Para Xilinha, o importante era realizar o sonho que tinha desde os oito anos e não ter cometido o pecado da luxúria."
+      },
+
+      // LINGUAGEM E HUMOR (Q11 - Q15)
+      {
+        id: 11, topic: 'linguagem',
+        question: "Qual é o principal mal-entendido que gera o humor no final do texto?",
+        options: [
+          "A) Xilinha confunde \"originalidade\" com \"novidade\"",
+          "B) Xilinha confunde \"luxúria\" (pecado capital) com \"luxo\" (categoria do concurso)",
+          "C) Dona Zenaide confunde \"fantasia\" com \"fantasma\"",
+          "D) Alfredo confunde \"vergonha\" com \"humildade\""
+        ],
+        answer: 1,
+        comment: "Ao final, Xilinha diz que sua fantasia era da categoria originalidade e \"não era categoria luxúria\"; quando Zenaide pergunta o que luxúria significa, ela responde: \"É luxo, não é?\". O narrador conclui que ela \"nunca foi boa em português\". Luxúria é o desejo sensual excessivo; luxo é a riqueza ostensiva."
+      },
+      {
+        id: 12, topic: 'linguagem',
+        question: "Quando Xilinha diz ser \"católica apostólica romanesca\" e dona Zenaide a corrige para \"romana\", o texto pretende:",
+        options: [
+          "A) Mostrar que Xilinha não é realmente católica",
+          "B) Criticar o uso da língua formal pela professora",
+          "C) Ensinar a forma correta da expressão religiosa",
+          "D) Reforçar, com humor, que Xilinha mistura e troca palavras por não dominar o vocabulário, o que prepara o mal-entendido final"
+        ],
+        answer: 3,
+        comment: "\"Romanesca\" é uma palavra parecida com \"romana\", mas de sentido diferente. A troca aparece antes do desfecho e prepara o leitor para a confusão luxúria/luxo. Xilinha admite: \"sempre fui péssima aluna de português, misturo um pouco as palavras\"."
+      },
+      {
+        id: 13, topic: 'linguagem',
+        question: "Na frase de Xilinha \"Vergonha é roubar e não saber carregar!\", o que ela quer dizer ao responder ao neto Alfredo?",
+        options: [
+          "A) Que não há motivo de vergonha em sair fantasiada, pois vergonha é fazer algo realmente errado",
+          "B) Que ela já roubou algo no passado",
+          "C) Que Alfredo deveria carregar a fantasia para ela",
+          "D) Que a fantasia é muito pesada para ela"
+        ],
+        answer: 0,
+        comment: "Trata-se de um ditado popular: o motivo de vergonha é praticar um ato errado (roubar), e não se divertir de forma inocente. Com ele, Xilinha responde à vergonha de Alfredo, que temia ser zombado pelos colegas."
+      },
+      {
+        id: 14, topic: 'linguagem',
+        question: "O narrador diz que havia \"um detalhe sexy\" na fantasia: saiote acima dos joelhos magros e meias cor-de-rosa. Qual é o efeito dessa expressão?",
+        options: [
+          "A) Sugere que a fantasia era realmente sensual e luxuriosa",
+          "B) Confirma a crítica moralista de dona Zenaide",
+          "C) É irônica e engraçada: o \"detalhe sexy\" é inocente e ridículo, o que desmente a ideia de que a fantasia teria luxúria",
+          "D) Mostra que Xilinha mentiu sobre a fantasia"
+        ],
+        answer: 2,
+        comment: "A ironia nasce do contraste entre o termo \"sexy\" e a imagem de uma senhora de 67 anos com joelhos magros e meias cor-de-rosa vestida de galinha. O detalhe ironiza o medo da luxúria e reforça o tom cômico."
+      },
+      {
+        id: 15, topic: 'linguagem',
+        question: "Qual é o tom predominante da narrativa e que tipo de narrador conta a história?",
+        options: [
+          "A) Trágico e dramático; narrador em primeira pessoa",
+          "B) Bem-humorado e irônico; narrador em terceira pessoa, que comenta com graça as atitudes das personagens",
+          "C) Científico e objetivo; narrador-personagem",
+          "D) Melancólico e saudosista; narrador em primeira pessoa"
+        ],
+        answer: 1,
+        comment: "O narrador não participa da história: usa a 3ª pessoa e faz comentários divertidos, como \"carola-carnavalesca\", \"família findomundense\" e \"galinha-d'angola mais deslumbrada\". As falas curtas e o diminutivo na descrição da cidade também reforçam o tom leve e irônico."
+      }
+    ];
+
+    const TOPICS = [
+      { key: 'personagens', name: 'Personagens e Cenário' },
+      { key: 'enredo', name: 'Enredo' },
+      { key: 'linguagem', name: 'Linguagem e Humor' }
+    ];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você compreendeu muito bem o texto.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Reler o Texto!';
+        subEl.innerText = 'Leia o resumo, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -3236,7 +3924,8 @@
     // ================== SIMULADOS ==================
     const SIMULADOS = [
       { id: 'hana', dataId: 'sim-data-hana', title: 'A Mala de Hana', desc: 'Literatura · Karen Levine', count: 42, icon: 'book-open-check', color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' },
-      { id: 'mat', dataId: 'sim-data-mat', title: 'Polígonos, Polinômios e Circunferências', desc: 'Matemática · Prova mensal', count: 25, icon: 'calculator', color: 'bg-brand-500/10 text-brand-600 dark:text-brand-400' }
+      { id: 'mat', dataId: 'sim-data-mat', title: 'Polígonos, Polinômios e Circunferências', desc: 'Matemática · Prova mensal', count: 25, icon: 'calculator', color: 'bg-brand-500/10 text-brand-600 dark:text-brand-400' },
+      { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' }
     ];
 
     function renderChooser() {
