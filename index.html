@@ -3627,6 +3627,849 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-doce"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: O Doce Pecado</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+          <i data-lucide="cookie" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: O Doce Pecado</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">25 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo da História</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 25 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (25)</button>
+      <button onclick="filterByTopic('personagens')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="personagens">Personagens e Cenário (Q1-Q8)</button>
+      <button onclick="filterByTopic('enredo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="enredo">Enredo (Q9-Q17)</button>
+      <button onclick="filterByTopic('linguagem')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="linguagem">Linguagem e Humor (Q18-Q25)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-25)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: O Doce Pecado</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. A confissão</h3>
+          <p>Adelaide, de 15 anos e 90 quilos, vai ao confessionário dizer que tem "sonhos eróticos": sonhou que um rapaz lindo a chamou de gostosa num elevador. O padre explica que sonho não é pecado e então ela confessa o que comeu de madrugada: panquecas de goiabada, pães doces e apfelstrudel.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. O conselho e a tentação</h3>
+          <p>O padre vê gula, mas conclui que excesso de comida pode ser doença e manda procurar um endocrinologista. No caminho para casa, em Ouro Preto, Adelaide passa pela casa de dona Vera, doceira de cheiro irresistível. Ela começa o regime "neste instante" e o abandona em minutos.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. O padre também cai em tentação</h3>
+          <p>O padre aparece para uma "visitinha rápida" e come os doces junto com elas, enquanto Roberto Carlos canta na TV uma música que defende as gordinhas. O conto termina com os docinhos acabando e o narrador brincando que os anjos barrocos de Ouro Preto também são barrigudos. Ao fim, há a receita dos "Camafeus da Gula".</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "O Doce Pecado".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/25</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no texto <strong>"O Doce Pecado"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "personagens",
+    "question": "Onde acontece a primeira cena do conto, em que Adelaide conversa com o padre?",
+    "options": [
+      "A) Na casa de dona Vera",
+      "B) No confessionário de uma igreja",
+      "C) Dentro de um elevador",
+      "D) Na cozinha da casa de Adelaide"
+    ],
+    "answer": 1,
+    "comment": "O conto começa com o diálogo \"Padre, eu tenho pecado!\", típico do confessionário. É ali que Adelaide conta o sonho e o que comeu, e há uma fila de pessoas esperando atrás dela."
+  },
+  {
+    "id": 2,
+    "topic": "personagens",
+    "question": "Quantos anos tem Adelaide, a jovem que se confessa?",
+    "options": [
+      "A) Doze anos",
+      "B) Dezoito anos",
+      "C) Quinze anos",
+      "D) Vinte e cinco anos"
+    ],
+    "answer": 2,
+    "comment": "Quando o padre pergunta a idade, ela responde: \"Quinze anos, padre\". Por isso ele a aconselha a não entrar em elevadores desacompanhada."
+  },
+  {
+    "id": 3,
+    "topic": "personagens",
+    "question": "Que característica física Adelaide revela ao padre ao explicar por que o elevador é um problema para ela?",
+    "options": [
+      "A) Pesa noventa quilos",
+      "B) Tem apenas um metro e meio de altura",
+      "C) Pesa setenta quilos",
+      "D) Usa cadeira de rodas"
+    ],
+    "answer": 0,
+    "comment": "Ela diz: \"Eu peso noventa quilos, padre\" e conta que, em Belo Horizonte, há gente que sai do elevador com medo de que ele despenque. Isso mostra o preconceito que ela sofre e dá sentido ao sonho com o rapaz que a chama de \"gostosa\"."
+  },
+  {
+    "id": 4,
+    "topic": "personagens",
+    "question": "Quem é dona Vera?",
+    "options": [
+      "A) A professora da cidade",
+      "B) Uma freira do convento",
+      "C) A mãe de Adelaide",
+      "D) Uma doceira de Ouro Preto, que convida Adelaide para entrar em sua casa"
+    ],
+    "answer": 3,
+    "comment": "Dona Vera tem o muro cheio de bandejas de doces de coco secando ao sol e é elogiada pelo padre: \"A senhora, dona Vera, é a melhor doceira de Ouro Preto!\". É ela quem leva Adelaide para dentro de casa, e a receita final é atribuída a ela."
+  },
+  {
+    "id": 5,
+    "topic": "personagens",
+    "question": "Em que cidade acontece a maior parte da história?",
+    "options": [
+      "A) Ouro Preto",
+      "B) Belo Horizonte",
+      "C) Mariana",
+      "D) Tiradentes"
+    ],
+    "answer": 0,
+    "comment": "O narrador diz: \"Isso aconteceu em Ouro Preto, foi o que me disseram\". Belo Horizonte aparece só quando Adelaide fala dos elevadores que conhece, e ela comenta que em Ouro Preto não há elevador."
+  },
+  {
+    "id": 6,
+    "topic": "personagens",
+    "question": "Que bebida dona Vera serve a Adelaide para acompanhar os docinhos?",
+    "options": [
+      "A) Limonada gelada",
+      "B) Suco de maracujá",
+      "C) Suco de jabuticaba",
+      "D) Café com leite"
+    ],
+    "answer": 2,
+    "comment": "Dona Vera diz: \"aqui está o refresco: suco de jabuticaba, gosta?\", e Adelaide responde: \"Adoro!\". Antes, ela tinha aceitado o refresco com a condição de que fosse sem açúcar, por causa do regime."
+  },
+  {
+    "id": 7,
+    "topic": "personagens",
+    "question": "Para qual ocasião dona Vera preparou os docinhos de coco?",
+    "options": [
+      "A) Para a quermesse da igreja",
+      "B) Para a festa da Inês",
+      "C) Para o aniversário do padre",
+      "D) Para vender na feira"
+    ],
+    "answer": 1,
+    "comment": "Ela explica: \"Fiz uns docinhos de coco para a festa da Inês, estão ótimos, modéstia à parte!\". A \"modéstia à parte\" é uma pitada de humor, pois a doceira elogia o próprio trabalho."
+  },
+  {
+    "id": 8,
+    "topic": "personagens",
+    "question": "Como o padre é caracterizado ao longo do conto?",
+    "options": [
+      "A) Compreensivo e apressado na confissão, mas tão guloso quanto Adelaide na casa de dona Vera",
+      "B) Severo e intolerante, condenando Adelaide por seus pecados",
+      "C) Distraído, pois não ouve nada do que ela diz",
+      "D) Indiferente aos doces e aos problemas de Adelaide"
+    ],
+    "answer": 0,
+    "comment": "Na confissão ele a absolve e a orienta a procurar um médico, mas se queixa da fila. Na casa de dona Vera, diz: \"Não resisto, peguei três!\". O humor está em ele cometer o mesmo \"pecado\" que acabara de ouvir."
+  },
+  {
+    "id": 9,
+    "topic": "enredo",
+    "question": "Qual é o sonho que Adelaide diz ser seu pecado?",
+    "options": [
+      "A) Sonhou que emagrecia noventa quilos de uma só vez",
+      "B) Sonhou que roubava os doces da casa de dona Vera",
+      "C) Entrou num elevador e um rapaz lindo lhe disse que ela era gostosa",
+      "D) Sonhou que se casava com o padre"
+    ],
+    "answer": 2,
+    "comment": "Ela fala em \"sonhos eróticos\" e conta o sonho do elevador com um \"gato-gente\" de olhos verdes. Para ela, ser elogiada assim é tão improvável que parece pecado."
+  },
+  {
+    "id": 10,
+    "topic": "enredo",
+    "question": "Por que o padre diz que o sonho não é pecado?",
+    "options": [
+      "A) Porque Adelaide é menor de idade",
+      "B) Porque ninguém é culpado pelo que sonha; pecado é o que se pratica acordado",
+      "C) Porque o padre não entendeu o sonho",
+      "D) Porque sonhos só são pecado depois da meia-noite"
+    ],
+    "answer": 1,
+    "comment": "Ele afirma: \"Se era sonho, não era pecado, filha! Nós não somos culpados por havermos sonhado\", e pergunta se ela fez algo acordada. Isso faz Adelaide confessar o que realmente a incomoda: a comida."
+  },
+  {
+    "id": 11,
+    "topic": "enredo",
+    "question": "O que Adelaide comeu à meia-noite, depois de \"assaltar a geladeira\"?",
+    "options": [
+      "A) Pizza, hambúrguer e refrigerante",
+      "B) Bolo de chocolate, sorvete e pudim",
+      "C) Cocadas, brigadeiros e pé de moleque",
+      "D) Panquecas de goiabada, sete pães doces com manteiga e uma tigela de apfelstrudel"
+    ],
+    "answer": 3,
+    "comment": "A lista é dita por ela mesma, de forma exagerada e engraçada. O padre conclui que se trata do pecado da gula."
+  },
+  {
+    "id": 12,
+    "topic": "enredo",
+    "question": "Qual pecado capital o padre identifica na confissão de Adelaide?",
+    "options": [
+      "A) A gula",
+      "B) A luxúria",
+      "C) A preguiça",
+      "D) A avareza"
+    ],
+    "answer": 0,
+    "comment": "Ele diz: \"Parece que você não consegue resistir ao pecado da gula, filha!\" e manda rezar três ave-marias. A gula é o pecado ligado ao excesso de comida e bebida, e é o tema do conto, inclusive na receita final."
+  },
+  {
+    "id": 13,
+    "topic": "enredo",
+    "question": "Por que o padre acaba dizendo que Adelaide \"nem pecou\"?",
+    "options": [
+      "A) Porque ela rezou antes de comer",
+      "B) Porque o confessionário estava fechado",
+      "C) Porque o excesso de comida pode ser um desequilíbrio de saúde e doença não é pecado",
+      "D) Porque dona Vera havia autorizado"
+    ],
+    "answer": 2,
+    "comment": "O padre muda de ideia: sugere um médico, um endocrinologista e uma dieta, e afirma: \"Doença não é pecado\". Ele a absolve de forma prática, e isso é irônico, pois depois ele mesmo se entrega aos doces."
+  },
+  {
+    "id": 14,
+    "topic": "enredo",
+    "question": "Quando Adelaide diz a dona Vera que começou o regime \"neste instante\", como a doceira reage?",
+    "options": [
+      "A) Elogia a decisão e guarda os doces",
+      "B) Brinca que ela deixe para começar daqui a duas horas e a incentiva a provar os docinhos",
+      "C) Chama o padre para apoiar o regime",
+      "D) Fica ofendida e manda Adelaide embora"
+    ],
+    "answer": 1,
+    "comment": "Dona Vera responde: \"Ora, ora, uai! Então deixa pra começar daqui a duas horas!\". Ela tenta e consegue Adelaide: o \"só unzinho\" vira vários, e o regime dura pouquíssimo."
+  },
+  {
+    "id": 15,
+    "topic": "enredo",
+    "question": "Quem toca o sininho antigo da porta de dona Vera, e o que faz ao entrar?",
+    "options": [
+      "A) O padre, que confessa não resistir ao cheirinho dos docinhos e pega três",
+      "B) O endocrinologista, que vem examinar Adelaide",
+      "C) Inês, que veio buscar os doces da festa",
+      "D) O marido de dona Vera, que reclama do barulho"
+    ],
+    "answer": 0,
+    "comment": "O padre entra \"para uma visitinha rápida\" e admite: \"O cheiro dos docinhos secando aí fora é um cheirinho tentador\". Ao ver Adelaide, os dois se reconhecem, mas fingem que nada aconteceu."
+  },
+  {
+    "id": 16,
+    "topic": "enredo",
+    "question": "Quando dona Vera estranha a \"mania de elevadores\" de Adelaide, como o padre reage?",
+    "options": [
+      "A) Conta todo o sonho a dona Vera",
+      "B) Repreende Adelaide em voz alta",
+      "C) Sai correndo da casa",
+      "D) Diz que não sabe do que a menina está falando, guardando o segredo da confissão"
+    ],
+    "answer": 3,
+    "comment": "O narrador explica que ele respondeu assim, \"zeloso dos segredos do confessionário\". Ao mesmo tempo, o leitor percebe que ele sabe de tudo, e isso é fonte de humor."
+  },
+  {
+    "id": 17,
+    "topic": "enredo",
+    "question": "Como termina a história, em relação ao regime e ao endocrinologista?",
+    "options": [
+      "A) Adelaide marca consulta e abandona os doces para sempre",
+      "B) Os docinhos acabam, ninguém procura médico e o narrador diz que em Ouro Preto não há elevadores nem endocrinologistas",
+      "C) O padre proíbe dona Vera de fazer doces",
+      "D) Adelaide volta ao confessionário e é castigada"
+    ],
+    "answer": 1,
+    "comment": "Os doces das tigelas vão sumindo, e o narrador conclui, com ironia, que \"todos os anjos barrocos adoram doces e são barrigudos, uai!\". A referência é aos anjinhos gorduchos da arte barroca de Ouro Preto."
+  },
+  {
+    "id": 18,
+    "topic": "linguagem",
+    "question": "No trecho \"Era um tremendo gato-gente\", seguido da pergunta do padre \"Angorá?\", onde está o humor?",
+    "options": [
+      "A) Adelaide realmente sonhou com um gato angorá",
+      "B) O padre usa uma gíria que Adelaide desconhece",
+      "C) O padre entende \"gato\" como o animal (raça angorá), sem conhecer a gíria para rapaz bonito",
+      "D) É um erro de impressão do texto"
+    ],
+    "answer": 2,
+    "comment": "\"Gato\" é gíria para homem bonito, e o padre, de outra geração, entende o sentido literal. O choque entre o jeito jovem de falar e a linguagem do padre é uma das fontes de humor do diálogo."
+  },
+  {
+    "id": 19,
+    "topic": "linguagem",
+    "question": "Adelaide diz \"morou?\" e o padre responde \"eu sou velho, sou padre, moro sempre no mesmo lugar\". O que isso mostra?",
+    "options": [
+      "A) O padre interpreta a gíria \"morou?\" (= entendeu?) no sentido literal de \"morar\"",
+      "B) O padre está com raiva de Adelaide",
+      "C) O padre mora longe da igreja",
+      "D) Adelaide pergunta onde o padre mora"
+    ],
+    "answer": 0,
+    "comment": "A gíria \"morou?\" significa \"entendeu?\". O padre não a conhece e responde literalmente, num mal-entendido causado pela diferença de linguagem entre gerações."
+  },
+  {
+    "id": 20,
+    "topic": "linguagem",
+    "question": "Em \"comi sete pecados, digo, sete pães doces\", qual é o efeito da troca de palavras?",
+    "options": [
+      "A) Mostra que Adelaide não sabe contar",
+      "B) Confirma que ela está mentindo",
+      "C) Indica que o padre corrigiu a menina",
+      "D) Um ato falho engraçado, que liga a comida aos sete pecados capitais"
+    ],
+    "answer": 3,
+    "comment": "A troca \"pecados/pães\" revela, com humor, que para Adelaide comer doces é quase um pecado capital. A expressão \"sete pecados\" lembra os sete pecados capitais, entre eles a gula."
+  },
+  {
+    "id": 21,
+    "topic": "linguagem",
+    "question": "Quando Adelaide fala em \"apfelstrudel... ou papefelstrodull, sei lá!\", o que o trecho revela?",
+    "options": [
+      "A) Que ela fala alemão fluentemente",
+      "B) Que ela não sabe pronunciar o nome do doce alemão, o que torna a fala mais natural e engraçada",
+      "C) Que ela inventou o doce no sonho",
+      "D) Que o padre conhece a receita"
+    ],
+    "answer": 1,
+    "comment": "Ela tropeça no nome estrangeiro e inventa uma pronúncia, o que reforça o tom informal e divertido da fala. O padre pergunta o que é, e ela explica: \"Um doce alemão, coberto de creme\"."
+  },
+  {
+    "id": 22,
+    "topic": "linguagem",
+    "question": "Qual é o sentido da cena em que aparece o cantor Roberto Carlos na televisão?",
+    "options": [
+      "A) Criticar as pessoas que gostam de doces",
+      "B) Mostrar que Adelaide e o padre não gostam de música",
+      "C) Defender, com humor, que não é preciso ser magra para ser bonita, o que valoriza Adelaide",
+      "D) Anunciar que o regime de Adelaide vai funcionar"
+    ],
+    "answer": 2,
+    "comment": "A música na televisão diz que a beleza não depende de magreza. Dona Vera comemora: \"Até que enfim saiu uma música defendendo as gordinhas!\". A cena responde ao sonho do elevador e fortalece a autoestima da personagem."
+  },
+  {
+    "id": 23,
+    "topic": "linguagem",
+    "question": "Qual é o efeito de nomes como \"barrigas-de-freiras\", \"olhos-de-sogra\" e \"amor-aos-pedacos\" na história?",
+    "options": [
+      "A) Mostram, de forma divertida, a variedade dos doces tradicionais e brincam com a ligação entre doce, igreja e gula",
+      "B) São nomes de pessoas que visitam a casa",
+      "C) Indicam que os doces estão estragados",
+      "D) São palavrões que os personagens evitam dizer"
+    ],
+    "answer": 0,
+    "comment": "São nomes populares de doces da tradição luso-brasileira, e o narrador os enfileira para mostrar a tentação. A mistura de elementos religiosos e sensuais nos nomes combina com o tema do pecado."
+  },
+  {
+    "id": 24,
+    "topic": "linguagem",
+    "question": "Como se classifica o narrador e qual é o tom do conto?",
+    "options": [
+      "A) Narrador-personagem em primeira pessoa, com tom trágico",
+      "B) Narrador em terceira pessoa que conta o que \"lhe disseram\", com tom bem-humorado e irônico",
+      "C) Narrador que é o próprio padre, com tom sério",
+      "D) Narrador científico, sem comentários pessoais"
+    ],
+    "answer": 1,
+    "comment": "O narrador não participa da cena e usa expressões como \"foi o que me disseram\", comentando com graça os fatos, como em \"Como toda gorda, tinha um rosto lindo\" e na frase final sobre os anjos barrocos."
+  },
+  {
+    "id": 25,
+    "topic": "linguagem",
+    "question": "A receita \"Camafeus da Gula\" aparece no fim do livro. Que gênero textual ela representa e como se liga ao conto?",
+    "options": [
+      "A) É um poema que resume o conto",
+      "B) É uma notícia sobre doces mineiros",
+      "C) É um texto instrucional (receita) que fecha a história com uma advertência bem-humorada: \"coma com moderação\", pois a gula é um pecado capital",
+      "D) É uma carta de dona Vera ao padre"
+    ],
+    "answer": 2,
+    "comment": "A receita tem lista de ingredientes e modo de preparo (texto instrucional) e é atribuída a dona Vera. O aviso final retoma o tema do conto: dá água na boca e ao mesmo tempo lembra, com humor, que a gula é um pecado capital."
+  }
+];
+
+    const TOPICS = [
+      { key: 'personagens', name: 'Personagens e Cenário' },
+      { key: 'enredo', name: 'Enredo' },
+      { key: 'linguagem', name: 'Linguagem e Humor' }
+    ];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você compreendeu muito bem o texto.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Reler o Texto!';
+        subEl.innerText = 'Leia o resumo, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -3925,7 +4768,8 @@
     const SIMULADOS = [
       { id: 'hana', dataId: 'sim-data-hana', title: 'A Mala de Hana', desc: 'Literatura · Karen Levine', count: 42, icon: 'book-open-check', color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' },
       { id: 'mat', dataId: 'sim-data-mat', title: 'Polígonos, Polinômios e Circunferências', desc: 'Matemática · Prova mensal', count: 25, icon: 'calculator', color: 'bg-brand-500/10 text-brand-600 dark:text-brand-400' },
-      { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' }
+      { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
+      { id: 'doce', dataId: 'sim-data-doce', title: 'O Doce Pecado', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'cookie', color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400' }
     ];
 
     function renderChooser() {
