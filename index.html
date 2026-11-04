@@ -5648,7 +5648,13 @@
       $('viewer-title').textContent = s.title;
       // Já abre no tema atual (evita "piscada" de tema errado)
       const themeNow = docIsDark(document) ? 'dark' : 'light';
-      const themed = html.replace(/<html([^>]*?)class="(?:dark|light)"/i, '<html$1class="' + themeNow + '"');
+      let themed = html.replace(/<html([^>]*?)class="(?:dark|light)"/i, '<html$1class="' + themeNow + '"');
+      // Embaralha as questões a cada abertura (Fisher-Yates), sem mexer nos ids/gabaritos
+      themed = themed
+        .replace(/\s*\(Q\d+\s*-\s*Q\d+\)/g, '')
+        .replace('Questão ${q.id}</span>', 'Questão ${questions.indexOf(q) + 1}</span>');
+      const shuffleJs = '(function(){try{for(var i=questions.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=questions[i];questions[i]=questions[j];questions[j]=t;}}catch(e){}})();';
+      themed = themed.replace(/<\/body>/i, '<scr' + 'ipt>' + shuffleJs + '</scr' + 'ipt></body>');
       const frame = $('sim-frame');
       frame.onload = attachFrameThemeSync;
       frame.srcdoc = themed;
