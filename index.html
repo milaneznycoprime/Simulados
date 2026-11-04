@@ -4470,6 +4470,849 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-unha"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: Unha de Fome</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+          <i data-lucide="pill" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: Unha de Fome</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">25 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo da História</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 25 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (25)</button>
+      <button onclick="filterByTopic('personagens')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="personagens">Personagens e Cenário (Q1-Q6)</button>
+      <button onclick="filterByTopic('enredo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="enredo">Enredo (Q7-Q17)</button>
+      <button onclick="filterByTopic('linguagem')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="linguagem">Linguagem e Humor (Q18-Q25)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-25)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: Unha de Fome</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. O farmacêutico-prático</h3>
+          <p>Seu Fagundes, de mais de setenta anos, mora no sul da Bahia, perto de Caravelas, e é dono da farmácia da vila. Nos anos 1950, sem médico no lugar, ele atende como "farmacêutico-prático", mesmo sem curso. Quando dona Isaurinha não consegue ter o bebê, nem com a parteira dona Filó, chamam seu Fagundes.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. A garrafa e a conta</h3>
+          <p>Ele manda dona Isaurinha assoprar dentro de uma garrafa vazia a cada contração, e depois de doze contrações nasce o menino, que recebe o nome de Hermenegildo. No dia seguinte, seu Fagundes manda cobrar cento e quarenta mil réis em papel de embrulho. A professora Ismênia lê a conta e descobre que a soma certa é cem mil e que há erros de português.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. Dois unhas de fome</h3>
+          <p>Seu Mané, marido de dona Isaurinha, vai reclamar e pede descontos, alegando pobreza. No fim, os dois admitem que são "unha de fome" e seu Mané convida seu Fagundes para padrinho do menino. Já "compadres", seu Mané se despede sem pagar e ainda diz que padrinho é quem deve dar presentes ao afilhado.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "Unha de Fome".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/25</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no texto <strong>"Unha de Fome"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "personagens",
+    "question": "Onde seu Fagundes morava?",
+    "options": [
+      "A) No interior de Minas Gerais, perto de Ouro Preto",
+      "B) No sul da Bahia, perto de Caravelas",
+      "C) No litoral de Pernambuco",
+      "D) No sertão do Ceará"
+    ],
+    "answer": 1,
+    "comment": "O texto começa assim: \"Seu Fagundes morava no sul da Bahia, perto de Caravelas\". O cenário é uma vila pequena, o que explica a falta de médico e o jeito caipira de falar das personagens."
+  },
+  {
+    "id": 2,
+    "topic": "personagens",
+    "question": "Como o narrador descreve a aparência de seu Fagundes?",
+    "options": [
+      "A) Arrumadinho, de calça de brim branca, camisa passada e engomada e bigode fininho grisalho",
+      "B) Descuidado, de roupas rasgadas e barba comprida",
+      "C) Elegante, de terno e gravata, sempre de chapéu",
+      "D) Jovem e forte, de camisa aberta e botas de couro"
+    ],
+    "answer": 0,
+    "comment": "A descrição mostra um homem asseado e vaidoso, já com \"passado dos setenta\" anos. Essa pose de doutor contrasta com a falta de estudo e com os erros de português da conta que ele escreve depois."
+  },
+  {
+    "id": 3,
+    "topic": "personagens",
+    "question": "O que significa ser \"farmacêutico-prático\", como seu Fagundes?",
+    "options": [
+      "A) Ser formado em Farmácia pela melhor faculdade",
+      "B) Ser apenas ajudante de outro farmacêutico",
+      "C) Ter farmácia e exercer a profissão apenas pela prática, sem ter feito curso",
+      "D) Ser médico que trabalha em farmácia"
+    ],
+    "answer": 2,
+    "comment": "Ele mesmo explica: \"eu tenho uma farmácia e já pratico injeção, receito remédio pra lombriga... Tenho munta prática, ora!\". O texto diz que, nos anos 1950, a lei não chegava com todas as exigências, então ele podia ter farmácia sem ser formado."
+  },
+  {
+    "id": 4,
+    "topic": "personagens",
+    "question": "Por que seu Fagundes era chamado quando havia problema no parto?",
+    "options": [
+      "A) Porque era o único parteiro formado da região",
+      "B) Porque era o marido da parteira",
+      "C) Porque era o prefeito da vila",
+      "D) Porque a vila era pobre e esquecida e não tinha médico"
+    ],
+    "answer": 3,
+    "comment": "O narrador diz: \"Naquela vila, pobrezinha, esquecida, também não existia médico\". Por isso, quando uma mulher sofria no parto, seu Fagundes \"tinha um remédio certo\"."
+  },
+  {
+    "id": 5,
+    "topic": "personagens",
+    "question": "Quem é dona Filó?",
+    "options": [
+      "A) A parteira que foi chamada primeiro, mas não conseguiu fazer a criança nascer",
+      "B) A professora que lê a conta",
+      "C) A esposa de seu Fagundes",
+      "D) A faxineira da farmácia"
+    ],
+    "answer": 0,
+    "comment": "O texto diz: \"Chamaram dona Filó, a parteira, mas a criança não nascia\". Só depois, sem alternativa, o marido de dona Isaurinha concorda em chamar seu Fagundes."
+  },
+  {
+    "id": 6,
+    "topic": "personagens",
+    "question": "Como seu Mané, marido de dona Isaurinha, reage à ideia de chamar seu Fagundes?",
+    "options": [
+      "A) Corre para chamá-lo logo no início",
+      "B) Custa a concordar em chamar um homem para atender a esposa no parto",
+      "C) Recusa e pede que a parteira resolva sozinha",
+      "D) Pede que o padre vá até a casa"
+    ],
+    "answer": 1,
+    "comment": "O narrador explica que o marido \"custou a concordar em chamar um homem para atender à sua esposa nas dificuldades do parto\". É um traço de época e de lugar, em que o parto era assunto de mulheres."
+  },
+  {
+    "id": 7,
+    "topic": "enredo",
+    "question": "Qual foi o \"jeito de prática da roça\" usado por seu Fagundes para ajudar no parto?",
+    "options": [
+      "A) Aplicou uma injeção para acelerar o parto",
+      "B) Fez dona Isaurinha tomar um chá de ervas",
+      "C) Entregou uma garrafa vazia, sem tampa, e mandou dona Isaurinha assoprar dentro dela a cada contração",
+      "D) Fez dona Isaurinha caminhar pela vila"
+    ],
+    "answer": 2,
+    "comment": "Ele manda: \"Assopra dentro da garrafa! Faz força, dona Isaurinha!\" e \"Aproveite a contração, assopra!\". O método é cômico e sem base científica, mas, no conto, funciona."
+  },
+  {
+    "id": 8,
+    "topic": "enredo",
+    "question": "Depois de quantas contrações a criança nasceu, e a que o narrador compara o nascimento?",
+    "options": [
+      "A) Três contrações; a um passarinho que sai do ninho",
+      "B) Vinte contrações; a uma fruta que cai do pé",
+      "C) Seis contrações; a uma bola que rola",
+      "D) Doze contrações; a uma rolha que salta para fora"
+    ],
+    "answer": 3,
+    "comment": "O texto diz: \"Depois de doze contrações... Plocotof! A criança nasceu como se fosse uma rolha que saltasse pra fora!\". A onomatopeia \"plocotof\" e a comparação com a rolha da garrafa reforçam o humor."
+  },
+  {
+    "id": 9,
+    "topic": "enredo",
+    "question": "Que nome o menino recebeu e por quê?",
+    "options": [
+      "A) Hermenegildo, o mesmo nome de seu Fagundes, que \"resolvera o problema\"",
+      "B) João, por ser um nome comum",
+      "C) Mané, em homenagem ao pai",
+      "D) Isaurino, em homenagem à mãe"
+    ],
+    "answer": 0,
+    "comment": "O narrador diz: \"como seu Fagundes resolvera o problema, o menino ganhou o nome de Hermenegildo, que era como seu Fagundes se chamava: Hermenegildo Fagundes\". É uma homenagem ao \"salvador\"."
+  },
+  {
+    "id": 10,
+    "topic": "enredo",
+    "question": "Como a conta chegou às mãos de seu Mané?",
+    "options": [
+      "A) O próprio seu Fagundes a entregou, em um envelope lacrado",
+      "B) O faxineiro da farmácia a levou, escrita em papel de embrulho cor-de-rosa com o carimbo da \"Pharmácia Fagundes\"",
+      "C) Foi enviada por carta pelo correio",
+      "D) Foi lida em voz alta na praça da vila"
+    ],
+    "answer": 1,
+    "comment": "No dia seguinte ao nascimento, seu Fagundes \"mandou o faxineiro da farmácia apresentar a conta\". O papel era de embrulho porque ele \"não era de gastar com um papel melhor\", o que já aponta a sua mão-de-vaca."
+  },
+  {
+    "id": 11,
+    "topic": "enredo",
+    "question": "Qual foi o total cobrado na conta e qual era o valor real da soma?",
+    "options": [
+      "A) Cobrou cem mil réis, mas a soma era cento e quarenta mil",
+      "B) Cobrou cento e quarenta mil réis e a soma estava correta",
+      "C) Cobrou cento e quarenta mil réis, mas a soma correta era cem mil réis",
+      "D) Cobrou setenta mil réis, mas a soma era cem mil"
+    ],
+    "answer": 2,
+    "comment": "Somando os itens (30 + 7 + 40 + 4 + 12 + 7), o resultado é 100 mil réis. O total escrito, \"cento e quarenta mil réis\", cobrava 40 mil a mais."
+  },
+  {
+    "id": 12,
+    "topic": "enredo",
+    "question": "Quem leu a conta em voz alta para seu Mané, e qual foi o comentário dela?",
+    "options": [
+      "A) Dona Filó, que disse que a conta estava certa",
+      "B) O padre, que pediu que a conta fosse perdoada",
+      "C) O faxineiro, que defendeu seu Fagundes",
+      "D) A professora Ismênia, que disse que o farmacêutico precisava voltar à escola"
+    ],
+    "answer": 3,
+    "comment": "Seu Mané \"não sabia ler muito bem\" e pediu ajuda à professora, que leu e percebeu os erros de português e de soma. O comentário é cômico, pois ataca a pretensão de seu Fagundes de parecer instruído."
+  },
+  {
+    "id": 13,
+    "topic": "enredo",
+    "question": "Quais itens da conta seu Mané contesta ao conversar com seu Fagundes?",
+    "options": [
+      "A) A cobrança da garrafa que foi e voltou, da lavagem dela e das assopradas que a própria esposa deu",
+      "B) A cobrança da visita do farmacêutico, por ter chegado atrasado",
+      "C) A cobrança do remédio, que não funcionou",
+      "D) A cobrança das vacinas dadas ao menino"
+    ],
+    "answer": 0,
+    "comment": "Seu Mané reclama: \"o sinhô cobrou a garrafa que foi e voltou?\" e \"cobrou as assopradas que minha muié assoprou? Num foi ela que assoprou, ou foi o sinhô?\". Seu Fagundes responde com a lavagem \"pra matá os micróbio\"."
+  },
+  {
+    "id": 14,
+    "topic": "enredo",
+    "question": "Quando seu Mané aponta que a soma está errada, como seu Fagundes reage?",
+    "options": [
+      "A) Rasga a conta e não cobra nada",
+      "B) Finge espanto, refaz a conta e diz que teve um \"lápsis\", pois errar é humano",
+      "C) Culpa o faxineiro pelo erro",
+      "D) Diz que a professora é que errou a soma"
+    ],
+    "answer": 1,
+    "comment": "O narrador diz que ele \"fingiu um espanto, contou, recontou, concordou\": \"Eu tive um lápsis. Errei, sem querer, mas o sinhô sabe que errar é humano, né?\". A palavra \"lápsis\" (lapso) mostra, de novo, a sua falta de estudo."
+  },
+  {
+    "id": 15,
+    "topic": "enredo",
+    "question": "Como seu Mané tenta conseguir desconto depois que o erro é corrigido?",
+    "options": [
+      "A) Oferece pagar com vacas",
+      "B) Promete pagar a conta no mês seguinte",
+      "C) Pede para cobrar só umas oito assopradas, depois chegam a quinze e a treze, alegando que é um pobre trabalhador",
+      "D) Pede ao padre que interfira"
+    ],
+    "answer": 2,
+    "comment": "É uma barganha: em vez das dezesseis assopradas (4 + 12), seu Mané pede \"umas oito\", seu Fagundes diz \"Cobro quinze\" e seu Mané volta com \"umas treze\", sempre alegando pobreza."
+  },
+  {
+    "id": 16,
+    "topic": "enredo",
+    "question": "Que argumentos seu Mané usa para dizer que não pode pagar?",
+    "options": [
+      "A) Que perdeu o emprego na farmácia",
+      "B) Que gastou tudo no batizado",
+      "C) Que o menino ficou doente",
+      "D) Que o armazém dele anda na pior e que suas vacas foram \"pro brejo\""
+    ],
+    "answer": 3,
+    "comment": "Ele diz: \"Meu armazém anda na pior\" e, quando perguntado das vacas, responde: \"Foram pro brejo\". A expressão \"ir pro brejo\" significa dar errado, perder-se."
+  },
+  {
+    "id": 17,
+    "topic": "enredo",
+    "question": "Como termina a discussão entre seu Mané e seu Fagundes?",
+    "options": [
+      "A) Seu Mané faz de seu Fagundes padrinho do menino e se despede sem pagar, falando em presentes para o afilhado",
+      "B) Seu Mané paga cem mil réis e eles brigam",
+      "C) Seu Fagundes perdoa a dívida de graça",
+      "D) Seu Fagundes chama o delegado"
+    ],
+    "answer": 0,
+    "comment": "Seu Mané o chama de \"cumpadre\" e o convida para padrinho, e seu Fagundes aceita. Quando lembra da conta, o novo compadre responde: \"Padrinho cobra parto de afilhado, hein?\" e pede presentes: talco, sabonete, mamadeira, chupeta. Os dois \"unhas de fome\" empatam."
+  },
+  {
+    "id": 18,
+    "topic": "linguagem",
+    "question": "O título \"Unha de Fome\" se refere a pessoas que:",
+    "options": [
+      "A) Passam fome por falta de comida",
+      "B) São mesquinhas e muito apegadas ao dinheiro, que não gostam de gastar",
+      "C) Têm unhas muito grandes",
+      "D) São muito generosas com os outros"
+    ],
+    "answer": 1,
+    "comment": "\"Unha de fome\" é expressão popular para pessoa avarenta, sovina. No final do conto, os dois dizem que se parecem: \"Todo mundo diz o mesminho do sinhô\", e \"nós semus unha de fome\"."
+  },
+  {
+    "id": 19,
+    "topic": "linguagem",
+    "question": "Qual é o efeito da palavra \"Plocotof!\" e da comparação com a rolha no trecho do nascimento?",
+    "options": [
+      "A) Reforça o humor e dá ideia de som e movimento, pois a criança \"salta\" como se saísse de uma garrafa",
+      "B) Indica que a criança nasceu doente",
+      "C) Mostra que o parto foi silencioso",
+      "D) Revela que a criança nasceu morta"
+    ],
+    "answer": 0,
+    "comment": "\"Plocotof\" é uma onomatopeia, palavra que imita um som. Junto com a comparação com a rolha, liga o nascimento à garrafa usada por seu Fagundes e cria uma cena engraçada."
+  },
+  {
+    "id": 20,
+    "topic": "linguagem",
+    "question": "Que efeito têm na conta os erros de escrita, como \"partu\", \"trabaio\", \"domissílio\" e \"anti-onti\"?",
+    "options": [
+      "A) Mostram que a conta foi escrita por uma criança",
+      "B) Mostram que seu Mané escreveu a conta",
+      "C) Mostram, de forma humorada, que o farmacêutico tinha pouco estudo apesar de se achar importante",
+      "D) Indicam que a conta é muito antiga e rara"
+    ],
+    "answer": 2,
+    "comment": "A conta é escrita \"com letra floreada\" e com erros (\"faquitura\", \"efetoado\", \"resolvimento\"). A professora conclui que ele precisava voltar à escola. O contraste entre pose e ignorância é uma das fontes do humor."
+  },
+  {
+    "id": 21,
+    "topic": "linguagem",
+    "question": "Que recurso o texto usa ao reproduzir falas como \"sinhô\", \"muié\", \"cumpadre\", \"munta prática\" e \"nóis\"?",
+    "options": [
+      "A) A linguagem formal e culta, usada em documentos",
+      "B) Gírias de jovens das grandes cidades",
+      "C) Termos técnicos da medicina",
+      "D) A representação da fala popular e regional, que caracteriza as personagens do interior"
+    ],
+    "answer": 3,
+    "comment": "O autor registra a pronúncia e o vocabulário da roça, o que dá realismo e humor às falas. É um exemplo de variação linguística: a língua muda de acordo com a região, a escolaridade e a situação."
+  },
+  {
+    "id": 22,
+    "topic": "linguagem",
+    "question": "O carimbo \"Pharmácia Fagundes — xaropes — garrafadas — injeções no braço ou nádegas — etcétera\" aparece em um papel de embrulho. Qual é a ironia?",
+    "options": [
+      "A) O carimbo busca dar \"aparência mais comercial\" e digna, mas o papel barato mostra a mão-de-vaca do dono",
+      "B) O papel é caro e luxuoso, como o carimbo",
+      "C) O carimbo mostra que a farmácia é nova e moderna",
+      "D) O carimbo foi feito pelo prefeito"
+    ],
+    "answer": 0,
+    "comment": "O narrador diz que o carimbo vinha \"à moda antiga\" e dava \"uma aparência mais comercial\", mas o papel era de embrulho \"que seu Fagundes não era de gastar com um papel melhor\". O \"etcétera\" ainda sugere que ele oferece de tudo."
+  },
+  {
+    "id": 23,
+    "topic": "linguagem",
+    "question": "Quando seu Mané diz \"Voz do povo é voz de Deus, cumpadre!\", qual é a intenção da fala?",
+    "options": [
+      "A) Rezar para que Deus perdoe a dívida",
+      "B) Criticar a religião dos moradores",
+      "C) Usa o ditado para admitir, com malícia, que ambos são \"unha de fome\" e aproximar-se de seu Fagundes, tornando-o compadre",
+      "D) Pedir ajuda ao povo da vila"
+    ],
+    "answer": 2,
+    "comment": "Seu Fagundes disse que o povo achava seu Mané unha de fome, e ele devolve a provocação com o ditado. A palavra \"cumpadre\" já prepara a esperteza do convite para padrinho."
+  },
+  {
+    "id": 24,
+    "topic": "linguagem",
+    "question": "Em \"Padrinho cobra parto de afilhado, hein?\", seguida do pedido de talco, sabonete, mamadeira e chupeta, qual é o efeito?",
+    "options": [
+      "A) Mostra que seu Mané quer pagar mais",
+      "B) Inverte a situação com humor: o credor vira o devedor de presentes, e seu Mané se livra da conta",
+      "C) Mostra que seu Fagundes é generoso",
+      "D) Indica que a conta foi paga em dinheiro"
+    ],
+    "answer": 1,
+    "comment": "Ao virar padrinho, seu Fagundes é que deveria dar presentes, e seu Mané inverte o jogo: \"Nós agora semu cumpadre\". O desfecho engraçado mostra que o esperto também pode ser enganado."
+  },
+  {
+    "id": 25,
+    "topic": "linguagem",
+    "question": "Que características do narrador aparecem em trechos como \"O jeito? Ora, seu Fagundes levou uma garrafa vazia, sem tampa\"?",
+    "options": [
+      "A) Narrador-personagem em primeira pessoa, com tom sério",
+      "B) Narrador científico, sem comentários",
+      "C) Narrador em terceira pessoa, com tom coloquial e bem-humorado, que conversa com o leitor por meio de perguntas",
+      "D) Narrador que é o próprio seu Fagundes"
+    ],
+    "answer": 2,
+    "comment": "O narrador não participa da história: relata os fatos e faz perguntas e comentários, como se contasse um \"causo\" ao leitor (\"O jeito? Ora...\"). Isso reforça o tom irônico e popular do conto."
+  }
+];
+
+    const TOPICS = [
+      { key: 'personagens', name: 'Personagens e Cenário' },
+      { key: 'enredo', name: 'Enredo' },
+      { key: 'linguagem', name: 'Linguagem e Humor' }
+    ];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você compreendeu muito bem o texto.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Reler o Texto!';
+        subEl.innerText = 'Leia o resumo, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -4769,7 +5612,8 @@
       { id: 'hana', dataId: 'sim-data-hana', title: 'A Mala de Hana', desc: 'Literatura · Karen Levine', count: 42, icon: 'book-open-check', color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' },
       { id: 'mat', dataId: 'sim-data-mat', title: 'Polígonos, Polinômios e Circunferências', desc: 'Matemática · Prova mensal', count: 25, icon: 'calculator', color: 'bg-brand-500/10 text-brand-600 dark:text-brand-400' },
       { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
-      { id: 'doce', dataId: 'sim-data-doce', title: 'O Doce Pecado', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'cookie', color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400' }
+      { id: 'doce', dataId: 'sim-data-doce', title: 'O Doce Pecado', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'cookie', color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400' },
+      { id: 'unha', dataId: 'sim-data-unha', title: 'Unha de Fome', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'pill', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' }
     ];
 
     function renderChooser() {
