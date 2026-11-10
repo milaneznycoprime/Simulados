@@ -5313,6 +5313,784 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-ira"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: Nem Toda Ira É Justa</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+          <i data-lucide="scale" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: Nem Toda Ira É Justa</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">20 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo da História</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 20 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (20)</button>
+      <button onclick="filterByTopic('personagens')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="personagens">Personagens e Cenário (Q1-Q5)</button>
+      <button onclick="filterByTopic('enredo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="enredo">Enredo (Q6-Q14)</button>
+      <button onclick="filterByTopic('linguagem')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="linguagem">Linguagem e Humor (Q15-Q20)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-20)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: Nem Toda Ira É Justa</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. O nome de princesa</h3>
+          <p>Em Nova Viçosa, no sul da Bahia, o marido de dona Munduca, operário da serraria e já doente, escolhe o nome da filha ainda por nascer: se for menina, terá nome de princesa, Ira, como a princesa Ira de Fürstenberg de uma revista. Dona Munduca estranha, pois a ira é pecado capital, mas o marido morre naquele momento.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. O batizado e o padre holandês</h3>
+          <p>Quando o padre holandês, que só aparece de três em três meses, chega para batizar a menina de quatro meses, ele se recusa a usar um nome de pecado capital. Dona Munduca insiste na vontade do falecido e, em meio a mal-entendidos de sotaque e de palavras, o padre manda escolher nome de santa.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. Justa Ira</h3>
+          <p>Ela escolhe o nome da avó, Justa, e a menina é batizada como Justa Ira. Adulta, grita e é temida, mas só briga por causas justas. Aos trinta anos, leva a filha para batizar e escolhe o nome Imaculada, que mais tarde casa "tudo certinho", e o conto termina perguntando se o nome influencia mesmo o destino.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "Nem Toda Ira É Justa".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/20</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no texto <strong>"Nem Toda Ira É Justa"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "personagens",
+    "question": "Onde se passa a história?",
+    "options": [
+      "A) Em Nova Viçosa, cidadezinha do sul da Bahia, antiga Marabá",
+      "B) Em Ouro Preto, em Minas Gerais",
+      "C) Em Caravelas, no litoral de Pernambuco",
+      "D) Em Amsterdã, na Holanda"
+    ],
+    "answer": 0,
+    "comment": "O narrador abre o conto com \"Sul da Bahia, cidadezinha de Nova Viçosa, antiga Marabá\", com coqueiros, praia longa e \"um relógio parado em qualquer tempo\", imagem de um lugar tranquilo e esquecido."
+  },
+  {
+    "id": 2,
+    "topic": "personagens",
+    "question": "Quem é dona Munduca?",
+    "options": [
+      "A) A professora da cidade",
+      "B) A dona da serraria",
+      "C) A mãe de uma menina de quatro meses, que fica viúva",
+      "D) A parteira que fez o parto"
+    ],
+    "answer": 2,
+    "comment": "Dona Munduca \"tivera uma filha\", que \"estava com quatro meses e iria ser batizada\". Seu marido, operário da serraria e já doente, morre ainda na conversa sobre o nome da criança."
+  },
+  {
+    "id": 3,
+    "topic": "personagens",
+    "question": "Como o narrador descreve o padre que chega à cidade?",
+    "options": [
+      "A) Brasileiro, baixo e muito falador",
+      "B) Holandês, muito louro e de poucas palavras, pois seu português \"era mais para o latim\"",
+      "C) Italiano, jovem e simpático",
+      "D) Português, idoso e severo com a língua"
+    ],
+    "answer": 1,
+    "comment": "O texto diz que ele \"falava pouco\" para não demonstrar que \"seu português era mais para o latim\" e o descreve como \"muito louro, totalmente holandês\". A origem do padre ajuda a criar o humor, pois ele nem sempre entende a fala baiana."
+  },
+  {
+    "id": 4,
+    "topic": "personagens",
+    "question": "Com que frequência o padre visitava a igreja da cidade, e qual era o efeito disso?",
+    "options": [
+      "A) Todos os dias, por isso havia pouca procura",
+      "B) De ano em ano, apenas para a missa de Natal",
+      "C) Uma vez por semana, aos domingos",
+      "D) De três em três meses, o que provocava uma \"liquidação geral de sacramentos\""
+    ],
+    "answer": 3,
+    "comment": "A igreja \"só recebia padre de três em três meses\". Nessa data, havia batismos, comunhões, casórios e até extrema-unção atrasada, tudo de uma vez, como numa liquidação."
+  },
+  {
+    "id": 5,
+    "topic": "personagens",
+    "question": "Qual era a profissão do marido de dona Munduca?",
+    "options": [
+      "A) Operário da serraria",
+      "B) Pescador",
+      "C) Comerciante",
+      "D) Professor"
+    ],
+    "answer": 0,
+    "comment": "O texto afirma: \"Seu marido, operário da serraria, já doente, escolhera o nome da criança\". A doença dele explica a pressa em escolher o nome e o desejo de que fosse respeitado."
+  },
+  {
+    "id": 6,
+    "topic": "enredo",
+    "question": "Que nomes o marido escolhera para o filho que ia nascer?",
+    "options": [
+      "A) Bento, se fosse menino; Maria, se fosse menina",
+      "B) Justo, se fosse menino; Justa, se fosse menina",
+      "C) Bremildo, se fosse menino, como seu avô; e nome de princesa, se fosse menina",
+      "D) Antônio, se fosse menino; Isabel, se fosse menina"
+    ],
+    "answer": 2,
+    "comment": "Ele diz: \"se nosso filho for menino-homem, vai se chamar Bremildo, como o meu avô. Se for menina-mulher, vai ter nome de princesa\". O nome da menina vinha de uma revista: a princesa Ira de Fürstenberg."
+  },
+  {
+    "id": 7,
+    "topic": "enredo",
+    "question": "Por que dona Munduca estranha o nome \"Ira\"?",
+    "options": [
+      "A) Porque achava o nome muito curto",
+      "B) Porque a ira é um dos sete pecados capitais, como ela ouviu o padre dizer",
+      "C) Porque era o nome de uma rival",
+      "D) Porque o nome era de outro país"
+    ],
+    "answer": 1,
+    "comment": "Ela reage: \"A Ira é um dos sete pecados capitais, e ouvi o padre dizer!\". O marido, porém, não responde: morre naquele momento."
+  },
+  {
+    "id": 8,
+    "topic": "enredo",
+    "question": "O que acontece com o marido durante a conversa sobre o nome da filha?",
+    "options": [
+      "A) Ele morre, e dona Munduca, \"de casada virou viúva\"",
+      "B) Ele se recupera e vai trabalhar",
+      "C) Ele muda de ideia sobre o nome",
+      "D) Ele vai buscar o padre"
+    ],
+    "answer": 0,
+    "comment": "O texto diz: \"O marido não respondeu... O marido não achava. Dona Munduca, naquele exato momento, de casada virou viúva\". Por isso o nome \"Ira\" passa a ser a última vontade do falecido."
+  },
+  {
+    "id": 9,
+    "topic": "enredo",
+    "question": "Qual é a reação do padre ao ouvir que o nome da criança é \"Ira\"?",
+    "options": [
+      "A) Aceita de imediato, porque é nome de princesa",
+      "B) Recusa-se a batizar com nome de pecado capital, dizendo que \"nas Europa\" pode ser nome de princesa, mas na Bahia é pecado",
+      "C) Pede dinheiro para batizar com esse nome",
+      "D) Foge da igreja assustado"
+    ],
+    "answer": 1,
+    "comment": "O padre responde que \"na Europa, pode ser nome de princesa, mas, na Bahia, em Nova Viçosa, é pecati capitalis!\" e insiste: \"Não batizar com nome de pecati capitalis!\". Dona Munduca precisa usar vários argumentos para convencê-lo."
+  },
+  {
+    "id": 10,
+    "topic": "enredo",
+    "question": "Que argumentos dona Munduca usa para tentar convencer o padre?",
+    "options": [
+      "A) Que a menina nasceu doente e precisa de proteção",
+      "B) Que o prefeito mandou batizar com esse nome",
+      "C) Que é a última vontade do marido, que o falecido pode virar alma penada e que não atender é pecado",
+      "D) Que ela pagaria uma grande quantia à igreja"
+    ],
+    "answer": 2,
+    "comment": "Ela diz que, se a vontade não for respeitada, o marido \"abre a boca no fundo da terra, engole o chão, vira alma penada\", e que \"é pecado não atender a vontade derradeira\". É um apelo à fé e ao medo do padre."
+  },
+  {
+    "id": 11,
+    "topic": "enredo",
+    "question": "Por que o padre diz que dona Munduca \"casou um pouquinho grávida\"?",
+    "options": [
+      "A) Porque ela se casou com outro homem",
+      "B) Porque o casamento foi feito às escondidas",
+      "C) Porque o padre esqueceu a data",
+      "D) Porque ela e o marido casaram só no religioso, na chegada do padre, quando a criança já estava a caminho"
+    ],
+    "answer": 3,
+    "comment": "Dona Munduca explica que o padre só vem de três em três meses e que a última vontade do marido era deitar com ela. Por isso o casamento aconteceu \"logo depois que o senhor chegou\", com a criança já a caminho."
+  },
+  {
+    "id": 12,
+    "topic": "enredo",
+    "question": "Qual é a solução do padre para o nome da criança e como dona Munduca responde?",
+    "options": [
+      "A) Sugere nome de santa (Maria, Madalena, Helena) e ela escolhe o da avó, Justa, junto com Ira",
+      "B) Sugere o nome Bremildo e ela aceita",
+      "C) Sugere que a menina fique sem nome",
+      "D) Sugere o nome da princesa em holandês"
+    ],
+    "answer": 0,
+    "comment": "O padre manda \"botar nome de santa\", e ela propõe \"Justa\", nome da avó, afirmando que existe Santa Justa. O padre aceita \"Justa Ira\", e conclui: \"Pode ser que, com o tempo, a gente acostume... com a graça do batismo\"."
+  },
+  {
+    "id": 13,
+    "topic": "enredo",
+    "question": "Como o conto mostra o resultado do nome \"Justa Ira\" na vida da personagem?",
+    "options": [
+      "A) Ela se tornou freira e viveu em silêncio",
+      "B) Quando cresceu, Justa Ira gritava por tudo e era temida, mas só brigava por justa ira, isto é, por causas justas",
+      "C) Ela mudou de nome e foi viver na Europa",
+      "D) Ela virou padre na cidade de Nova Viçosa"
+    ],
+    "answer": 1,
+    "comment": "O narrador diz que ela \"ficou impossível: gritava por qualquer coisa, todos a temiam e respeitavam. Mas ela só brigava por JUSTA IRA\". O nome vira trocadilho e explica o título do conto."
+  },
+  {
+    "id": 14,
+    "topic": "enredo",
+    "question": "Como termina o conto?",
+    "options": [
+      "A) Justa Ira batiza a filha com o nome \"Ira\"",
+      "B) Justa Ira vai embora de Nova Viçosa",
+      "C) Justa Ira, aos trinta anos, leva a filha para batizar e escolhe o nome \"Imaculada\", que se casará de véu e grinalda, \"tudo certinho\"",
+      "D) O padre holandês volta e pede desculpas"
+    ],
+    "answer": 2,
+    "comment": "No final, o outro padre pergunta o nome da menina e ela diz \"Imaculada\". Imaculada, mais tarde, casa \"de véu e grinalda, tudo certinho\", ao contrário da avó, que casou grávida. A pergunta final, \"Nome tem dessas coisas, dizem. Será?\", fecha o conto com ironia."
+  },
+  {
+    "id": 15,
+    "topic": "linguagem",
+    "question": "Qual é o jogo de sentido do título \"Nem toda ira é justa\"?",
+    "options": [
+      "A) Ele afirma que toda ira é um pecado terrível",
+      "B) Ele retoma o nome da personagem, \"Justa Ira\", e brinca com a ideia de uma ira que pode ou não ser justa",
+      "C) Ele fala apenas do nome da avó",
+      "D) Ele se refere à serraria da cidade"
+    ],
+    "answer": 1,
+    "comment": "O título faz trocadilho com o nome da personagem e com o pecado capital da ira. A ira que Justa Ira sente é apenas \"justa\", isto é, usada por causas justas, o que dá uma interpretação positiva a algo visto como pecado."
+  },
+  {
+    "id": 16,
+    "topic": "linguagem",
+    "question": "Que recurso o texto usa em falas como \"Irrra?\", \"pecati capitalis\" e \"Mim nao batizarrr\"?",
+    "options": [
+      "A) A imitação do jeito de falar de um estrangeiro, que gera humor e caracteriza o padre holandês",
+      "B) O uso de linguagem formal e culta",
+      "C) A representação da fala de crianças",
+      "D) A reprodução de um texto em latim correto"
+    ],
+    "answer": 0,
+    "comment": "O autor escreve o \"r\" alongado e erros de português para reproduzir o sotaque do holandês. Isso reforça o humor e a dificuldade de comunicação entre o padre e dona Munduca."
+  },
+  {
+    "id": 17,
+    "topic": "linguagem",
+    "question": "No trecho em que dona Munduca diz \"amiúde\" e o padre entende \"amite\" e pergunta \"Eu deveria me mudar daqui?\", onde está o humor?",
+    "options": [
+      "A) No fato de dona Munduca falar em outra língua",
+      "B) No uso de uma gíria que ninguém entende",
+      "C) No mal-entendido causado pela palavra pouco conhecida e pela pronúncia diferente",
+      "D) Na falta de respeito de dona Munduca"
+    ],
+    "answer": 2,
+    "comment": "\"Amiúde\" significa \"com frequência\", e o padre, sem dominar bem a língua, entende outra coisa e acha que deveria se mudar. Dona Munduca esclarece: \"Vir mais vezes, seu padre. A gente sente falta...\"."
+  },
+  {
+    "id": 18,
+    "topic": "linguagem",
+    "question": "Quando o padre diz \"não era hora de pecar contra o catecismo, digo, castidade\", o que a troca de palavras revela?",
+    "options": [
+      "A) Que ele ensina catecismo na cidade",
+      "B) Que ele quer mudar de assunto de propósito",
+      "C) Que ele sabe tudo sobre a vida de dona Munduca",
+      "D) Um ato falho, pois o padre troca as palavras e mostra seu embaraço"
+    ],
+    "answer": 3,
+    "comment": "O ato falho é uma troca involuntária de palavras que revela um desconforto. Aqui, o padre fica constrangido ao ouvir sobre a \"penúltima vontade\" do marido de dona Munduca."
+  },
+  {
+    "id": 19,
+    "topic": "linguagem",
+    "question": "Qual é o efeito da pergunta final \"Nome tem dessas coisas, dizem. Será?\"?",
+    "options": [
+      "A) Deixa no ar, com ironia, se o nome realmente influencia o destino das pessoas",
+      "B) Afirma que o nome não tem nenhuma importância",
+      "C) Mostra que o narrador está bravo com os personagens",
+      "D) Resume o conto de forma objetiva e científica"
+    ],
+    "answer": 0,
+    "comment": "Justa Ira realmente briga \"por justa ira\" e Imaculada se casa \"de véu e grinalda, tudo certinho\". O narrador sugere uma relação entre nome e destino, mas termina com uma pergunta que deixa a conclusão para o leitor."
+  },
+  {
+    "id": 20,
+    "topic": "linguagem",
+    "question": "Que características aparecem na voz do narrador em trechos como \"nem sei se ainda existe\" e \"sei lá\"?",
+    "options": [
+      "A) Tom científico, com dados precisos",
+      "B) Tom informal, de quem conta um causo, com comentários bem-humorados e sem certeza total",
+      "C) Tom trágico, de quem lamenta uma perda",
+      "D) Tom sério e distante, sem opinião sobre os fatos"
+    ],
+    "answer": 1,
+    "comment": "O narrador fala como quem conta um \"causo\" que ouviu: duvida (\"nem sei se ainda existe\", \"sei lá\"), faz comentários (\"Rosas vermelhas seria demais\") e se dirige ao leitor com leveza."
+  }
+];
+
+    const TOPICS = [
+      { key: 'personagens', name: 'Personagens e Cenário' },
+      { key: 'enredo', name: 'Enredo' },
+      { key: 'linguagem', name: 'Linguagem e Humor' }
+    ];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você compreendeu muito bem o texto.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Reler o Texto!';
+        subEl.innerText = 'Leia o resumo, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -5613,7 +6391,8 @@
       { id: 'mat', dataId: 'sim-data-mat', title: 'Polígonos, Polinômios e Circunferências', desc: 'Matemática · Prova mensal', count: 25, icon: 'calculator', color: 'bg-brand-500/10 text-brand-600 dark:text-brand-400' },
       { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
       { id: 'doce', dataId: 'sim-data-doce', title: 'O Doce Pecado', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'cookie', color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400' },
-      { id: 'unha', dataId: 'sim-data-unha', title: 'Unha de Fome', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'pill', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' }
+      { id: 'unha', dataId: 'sim-data-unha', title: 'Unha de Fome', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'pill', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' },
+      { id: 'ira', dataId: 'sim-data-ira', title: 'Nem Toda Ira É Justa', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'scale', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' }
     ];
 
     function renderChooser() {
