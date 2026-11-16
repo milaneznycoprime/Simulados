@@ -6091,6 +6091,717 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-moda"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-shirt=1.0">
+  <title>Simulado: Moda e Arte</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/15">
+          <i data-lucide="shirt" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: Moda e Arte</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">15 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo dos Temas</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 15 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (15)</button>
+      <button onclick="filterByTopic('desfile')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="desfile">Desfile e Estilista (3)</button>
+      <button onclick="filterByTopic('museu')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="museu">Das Passarelas para o Museu (3)</button>
+      <button onclick="filterByTopic('vanguarda')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="vanguarda">Desfile de Vanguarda (3)</button>
+      <button onclick="filterByTopic('cubismo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="cubismo">Cubismo (3)</button>
+      <button onclick="filterByTopic('croqui')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="croqui">Croqui (3)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-15)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: Moda e Arte</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. Desfile, estilista e museu</h3>
+          <p>O desfile contemporâneo é uma narrativa visual do estilista, reforçada por cenografia, luz e trilha sonora. Charles Frederick Worth, no século XIX, assinou suas criações e usou modelos vivas. Quando a roupa vai para o museu, deixa de ser utilitária e vira objeto de estudo, mas seus tecidos exigem conservação cuidadosa. Um exemplo de parceria com a arte é o Vestido Lagosta, de Schiaparelli e Dalí.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. Vanguarda e Cubismo</h3>
+          <p>A vanguarda rompe padrões e experimenta formas. Nos anos 1980, Rei Kawakubo e Yohji Yamamoto levaram a Paris peças pretas, amplas e assimétricas, e o Desconstrutivismo (Margiela) expõe costuras e etapas inacabadas. O Cubismo de Picasso e Braque abandonou a perspectiva única, passou do Analítico (tons sóbrios) ao Sintético (cores e colagens) e inspirou estampas e recortes geométricos na moda.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. Croqui</h3>
+          <p>O croqui é o esboço rápido e expressivo da ideia inicial, da silhueta e do caimento da peça. A figura costuma ter proporções alongadas (9 a 10 cabeças) para valorizar o movimento do tecido. Já o desenho técnico é plano, sem corpo, e detalha costuras e medidas para a modelagem e a costura.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "Moda e Arte".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/15</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no conteúdo <strong>"Moda e Arte"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "desfile",
+    "question": "Qual é a principal função estética e comunicativa de um desfile de moda contemporâneo além da simples exibição comercial de roupas?",
+    "options": [
+      "A) Substituir completamente a necessidade de lojas físicas e catálogos impressos.",
+      "B) Construir uma narrativa visual que expressa o conceito e a identidade do estilista.",
+      "C) Padronizar os tecidos utilizados por todas as marcas na mesma temporada.",
+      "D) Apresentar exclusivamente peças históricas restauradas de séculos passados."
+    ],
+    "answer": 1,
+    "comment": "Hoje em dia, um desfile vai muito além de um simples catálogo vivo para vender roupas. Ele funciona como um espetáculo artístico e de comunicação, onde o estilista apresenta sua visão de mundo, suas inspirações e a identidade da marca por meio de uma história visual."
+  },
+  {
+    "id": 2,
+    "topic": "desfile",
+    "question": "Historicamente, qual transformação introduzida por Charles Frederick Worth no século XIX consolidou a figura moderna do estilista e do desfile?",
+    "options": [
+      "A) A proibição do uso de modelos humanas, substituindo-as por manequins de madeira.",
+      "B) A realização de desfiles exclusivamente ao ar livre em praças públicas.",
+      "C) A criação da costura industrial automatizada e o fim da alta-costura manual.",
+      "D) A assinatura das peças com etiqueta própria e o uso de modelos vivas em salões."
+    ],
+    "answer": 3,
+    "comment": "Antes de Charles Frederick Worth (considerado o \"pai da alta-costura\"), os costureiros apenas obedeciam aos desejos das clientes ricas. Worth mudou isso ao criar suas próprias coleções, assinar as roupas como um artista assina um quadro e usar modelos reais (chamadas de *sósias*) para exibir os vestidos em seu salão em Paris."
+  },
+  {
+    "id": 3,
+    "topic": "desfile",
+    "question": "De que maneira a cenografia, a iluminação e a trilha sonora interferem na percepção do público durante um desfile de moda?",
+    "options": [
+      "A) Reduzem o custo de produção da coleção ao dispensar o uso de tecidos nobres.",
+      "B) São elementos obrigatórios por lei para validar o registro comercial das peças.",
+      "C) Criam uma experiência multissensorial que reforça o tema e a atmosfera da coleção.",
+      "D) Servem apenas para distrair o público de possíveis defeitos de costura nas roupas."
+    ],
+    "answer": 2,
+    "comment": "Luzes, música e cenário não são apenas enfeites; eles ajudam a transportar o público para o universo imaginado pelo estilista, despertando emoções e deixando mais claro qual é a mensagem ou o clima daquelas roupas."
+  },
+  {
+    "id": 4,
+    "topic": "museu",
+    "question": "Quando uma peça de vestuário sai da passarela e passa a integrar uma exposição museológica, qual mudança fundamental ocorre em sua função?",
+    "options": [
+      "A) Deixa de ter qualquer relação com a história da arte ou da sociedade.",
+      "B) Torna-se disponível para que os visitantes experimentem e fotografem no corpo.",
+      "C) Perde sua função utilitária de vestir para tornar-se objeto de contemplação e estudo.",
+      "D) Passa a ser produzida em larga escala industrial para venda na loja do museu."
+    ],
+    "answer": 2,
+    "comment": "Quando uma roupa entra em um museu, ela deixa de servir para proteger ou enfeitar o corpo de alguém no dia a dia. Ela passa a ser tratada como uma obra de arte ou um documento histórico, feito para ser observado, analisado e preservado."
+  },
+  {
+    "id": 5,
+    "topic": "museu",
+    "question": "Qual desafio específico a conservação museológica enfrenta ao preservar trajes de passarela em comparação com esculturas em bronze ou pedra?",
+    "options": [
+      "A) O fato de que os tecidos antigos se transformam naturalmente em metal com o tempo.",
+      "B) A impossibilidade de transportar roupas entre diferentes países para exposições.",
+      "C) A alta fragilidade das fibras têxteis diante da luz, umidade e ação da gravidade.",
+      "D) A ausência de registros históricos sobre quem criou as peças após o século XX."
+    ],
+    "answer": 2,
+    "comment": "Diferente de estátuas de pedra ou metal, tecidos como seda, algodão e lã são materiais orgânicos muito delicados. A luz forte desbota as cores, a umidade causa mofo e o próprio peso da roupa pendurada pode rasgar as costuras com o passar dos anos."
+  },
+  {
+    "id": 6,
+    "topic": "museu",
+    "question": "O diálogo entre moda e museus frequentemente revela peças criadas em parceria entre estilistas e artistas plásticos. Qual exemplo histórico ilustra essa união?",
+    "options": [
+      "A) O Vestido Lagosta criado pela estilista Elsa Schiaparelli em parceria com Salvador Dalí.",
+      "B) A jaqueta jeans pintada por Michelangelo para a corte francesa.",
+      "C) O terno de três peças criado por Leonardo da Vinci e Giorgio Armani.",
+      "D) O vestido de plástico reciclado criado por Claude Monet e Coco Chanel."
+    ],
+    "answer": 0,
+    "comment": "Em 1937, a estilista italiana Elsa Schiaparelli uniu-se ao pintor surrealista Salvador Dalí para criar um vestido de gala com uma grande lagosta pintada na saia. Essa peça tornou-se um ícone da união entre moda e artes visuais, estando hoje exposta em museus."
+  },
+  {
+    "id": 7,
+    "topic": "vanguarda",
+    "question": "O que caracteriza essencialmente um desfile de vanguarda no cenário da moda internacional?",
+    "options": [
+      "A) A apresentação silenciosa de peças sem qualquer conceito artístico por trás.",
+      "B) A ruptura com padrões estéticos convencionais e a experimentação radical de formas.",
+      "C) A reprodução fiel de trajes tradicionais da realeza europeia do século XVIII.",
+      "D) O foco exclusivo em roupas esportivas básicas para o cotidiano escolar."
+    ],
+    "answer": 1,
+    "comment": "Na arte e na moda, \"vanguarda\" significa estar à frente do seu tempo, quebrando regras. Um desfile de vanguarda não busca apenas fazer roupas \"bonitas\" ou fáceis de usar, mas sim provocar o público, testar novos materiais e questionar o que entendemos por beleza e vestuário."
+  },
+  {
+    "id": 8,
+    "topic": "vanguarda",
+    "question": "Na década de 1980, estilistas japoneses como Rei Kawakubo e Yohji Yamamoto revolucionaram Paris com desfiles de vanguarda. Qual característica marcou essa ruptura?",
+    "options": [
+      "A) O retorno dos espartilhos rígidos e das saias com armação de ferro.",
+      "B) O uso exclusivo de cores neon fluorescentes e silhuetas extremamente justas ao corpo.",
+      "C) A inspiração direta nos uniformes militares americanos da Segunda Guerra Mundial.",
+      "D) A assimetria, o predomínio do preto e formas amplas que desconstruíam a silhueta tradicional."
+    ],
+    "answer": 3,
+    "comment": "Nos anos 1980, a moda ocidental valorizava roupas justas, coloridas e que marcavam a cintura. Os estilistas japoneses chocaram Paris ao apresentar peças largas, assimétricas, quase todas pretas e com aparência \"inacabada\", mudando para sempre a história da moda contemporânea."
+  },
+  {
+    "id": 9,
+    "topic": "vanguarda",
+    "question": "Como o movimento do Desconstrutivismo na moda, associado a nomes como Martin Margiela, manifesta-se em um desfile de vanguarda?",
+    "options": [
+      "A) Escondendo completamente qualquer marca de costura com camadas espessas de tinta.",
+      "B) Expondo costuras internas, forros, alinhavos e etapas inacabadas da construção da roupa.",
+      "C) Utilizando apenas tecidos sintéticos brilhantes colados diretamente na pele.",
+      "D) Eliminando completamente o uso de roupas e apresentando apenas acessórios."
+    ],
+    "answer": 1,
+    "comment": "O Desconstrutivismo na moda mostra \"o avesso\" do trabalho. Em vez de esconder como a roupa foi feita, estilistas como Martin Margiela deixam etiquetas à mostra, zíperes aparentes e bainhas sem acabamento para valorizar o processo artesanal de criação."
+  },
+  {
+    "id": 10,
+    "topic": "cubismo",
+    "question": "Qual ruptura visual fundamental o Cubismo, liderado por Pablo Picasso e Georges Braque, promoveu na história da pintura ocidental?",
+    "options": [
+      "A) O abandono da perspectiva tradicional única em favor de múltiplos pontos de vista simultâneos.",
+      "B) A pintura exclusiva de paisagens naturais ao ar livre sem figuras humanas.",
+      "C) O retorno rigoroso às regras de proporção e realismo fotográfico do Renascimento.",
+      "D) A proibição do uso de formas geométricas em telas de grande formato."
+    ],
+    "answer": 0,
+    "comment": "Desde o Renascimento, os pintores tentavam criar a ilusão de profundidade olhando para a cena de um único ponto fixo. O Cubismo quebrou essa regra ao mostrar um mesmo objeto de frente, de perfil e de cima ao mesmo tempo, fragmentando a imagem em formas geométricas."
+  },
+  {
+    "id": 11,
+    "topic": "cubismo",
+    "question": "Como se diferenciam as duas principais fases do movimento cubista: o Cubismo Analítico e o Cubismo Sintético?",
+    "options": [
+      "A) O Analítico fragmenta o objeto em tons sóbrios; o Sintético reintroduz cores e colagens.",
+      "B) O Analítico é feito em esculturas de pedra; o Sintético é feito apenas em fotografia.",
+      "C) O Analítico usa apenas cores primárias puras; o Sintético usa apenas preto e branco.",
+      "D) O Analítico retrata apenas animais; o Sintético retrata apenas retratos da nobreza."
+    ],
+    "answer": 0,
+    "comment": "Na primeira fase (Analítico), Picasso e Braque \"desmontavam\" tanto os objetos em pedacinhos geométricos que ficava difícil reconhecê-los, usando quase só tons de marrom, cinza e ocre. Na segunda fase (Sintético), eles voltaram a usar cores vivas e passaram a colar materiais reais (como recortes de jornal) diretamente na tela."
+  },
+  {
+    "id": 12,
+    "topic": "cubismo",
+    "question": "De que maneira os princípios visuais do Cubismo influenciaram o design de moda ao longo do século XX?",
+    "options": [
+      "A) Pela proibição de qualquer estampa geométrica nas coleções de alta-costura.",
+      "B) Pela padronização de vestidos longos monocromáticos sem nenhum recorte.",
+      "C) Pelo abandono definitivo do uso de tecidos naturais na confecção de roupas.",
+      "D) Pela aplicação de estampas geométricas, recortes assimétricos e volumes estruturados."
+    ],
+    "answer": 3,
+    "comment": "Os estilistas absorveram a estética cubista trocando as curvas suaves e florais por linhas retas, ângulos marcados, blocos de cores contrastantes e modelagens arquitetônicas que criam novas formas geométricas sobre o corpo."
+  },
+  {
+    "id": 13,
+    "topic": "croqui",
+    "question": "Qual é a definição e a função principal de um croqui no desenvolvimento de uma coleção de moda?",
+    "options": [
+      "A) É uma planilha financeira que calcula o custo de botões, zíperes e linhas da peça.",
+      "B) É o contrato jurídico que registra a patente do tecido junto aos órgãos comerciais.",
+      "C) É o molde final em tamanho real utilizado diretamente para cortar o tecido na fábrica.",
+      "D) É um esboço rápido e expressivo que registra a ideia inicial, a silhueta e o caimento da peça."
+    ],
+    "answer": 3,
+    "comment": "O croqui é o primeiro passo visual de uma criação. Ele não precisa ter medidas exatas de costura; seu objetivo é capturar rapidamente a inspiração do estilista, o movimento do tecido e o estilo geral da roupa antes que ela seja confeccionada."
+  },
+  {
+    "id": 14,
+    "topic": "croqui",
+    "question": "Por que os croquis de moda tradicionalmente apresentam figuras humanas com proporções alongadas (frequentemente de 9 a 10 cabeças de altura)?",
+    "options": [
+      "A) Porque as roupas de desfile são confeccionadas apenas para pessoas com mais de 2 metros.",
+      "B) Para economizar papel durante o desenho de acessórios pequenos como anéis e brincos.",
+      "C) Para valorizar o caimento, o movimento dos tecidos e a elegância visual da silhueta.",
+      "D) Porque os estilistas desconhecem as regras básicas da anatomia humana real."
+    ],
+    "answer": 2,
+    "comment": "Enquanto um ser humano comum tem proporção média de 7,5 a 8 cabeças de altura, o croqui de moda estica o corpo (especialmente as pernas) para que o desenho da roupa tenha mais espaço para fluir, destacando detalhes, pregas e o caimento de forma mais dramática e elegante."
+  },
+  {
+    "id": 15,
+    "topic": "croqui",
+    "question": "Qual é a diferença fundamental entre um croqui artístico (de criação) e um desenho técnico (desenho planificado) na indústria da moda?",
+    "options": [
+      "A) O croqui é usado apenas para moda masculina e o desenho técnico apenas para moda infantil.",
+      "B) O croqui é feito no computador e o desenho técnico é feito sempre com tinta a óleo.",
+      "C) O croqui expressa movimento e estilo no corpo; o técnico detalha costuras e medidas sem corpo.",
+      "D) Não existe diferença prática entre eles, pois ambos possuem exatamente a mesma função."
+    ],
+    "answer": 2,
+    "comment": "O croqui artístico serve para inspirar e mostrar o \"espírito\" da roupa vestida em uma figura humana estilizada. Já o desenho técnico é um desenho plano (como um mapa da roupa vista de frente e de costas, sem modelo), feito para a equipe de modelagem e costura saber exatamente onde colocar cada botão, bolso e pesponto."
+  }
+];
+
+    const TOPICS = [{"key": "desfile", "name": "Desfile e Estilista"}, {"key": "museu", "name": "Das Passarelas para o Museu"}, {"key": "vanguarda", "name": "Desfile de Vanguarda"}, {"key": "cubismo", "name": "Cubismo"}, {"key": "croqui", "name": "Croqui"}];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você dominou muito bem o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Revisar o Conteúdo!';
+        subEl.innerText = 'Leia o resumo dos temas, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -6392,7 +7103,8 @@
       { id: 'baile', dataId: 'sim-data-baile', title: 'O Baile do Fim do Mundo', desc: 'Literatura · Interpretação de texto', count: 15, icon: 'party-popper', color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
       { id: 'doce', dataId: 'sim-data-doce', title: 'O Doce Pecado', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'cookie', color: 'bg-pink-500/10 text-pink-600 dark:text-pink-400' },
       { id: 'unha', dataId: 'sim-data-unha', title: 'Unha de Fome', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'pill', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' },
-      { id: 'ira', dataId: 'sim-data-ira', title: 'Nem Toda Ira É Justa', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'scale', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' }
+      { id: 'ira', dataId: 'sim-data-ira', title: 'Nem Toda Ira É Justa', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'scale', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
+      { id: 'moda', dataId: 'sim-data-moda', title: 'Moda e Arte', desc: 'Artes · Desfile, Cubismo e Croqui', count: 15, icon: 'shirt', color: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400' }
     ];
 
     function renderChooser() {
