@@ -7580,6 +7580,781 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-ideo"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: Ideologias do Século XIX</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/20">
+          <i data-lucide="landmark" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: Ideologias do Século XIX</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">20 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo dos Temas</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 20 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (20)</button>
+      <button onclick="filterByTopic('liberalismo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="liberalismo">Liberalismo (5)</button>
+      <button onclick="filterByTopic('socialismo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="socialismo">Socialismo Científico (5)</button>
+      <button onclick="filterByTopic('anarquismo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="anarquismo">Anarquismo (5)</button>
+      <button onclick="filterByTopic('nacionalismo')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="nacionalismo">Nacionalismo (5)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-20)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: Ideologias do Século XIX</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. Liberalismo</h3>
+          <p>Surgiu do Iluminismo e das revoluções burguesas. Defende liberdades individuais, propriedade privada, igualdade perante a lei, governo limitado e livre mercado. Nomes: Locke (direitos naturais), Montesquieu (separação dos poderes) e Adam Smith (A Riqueza das Nações, 1776). Sem regulação, o capitalismo industrial gerou miséria operária.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. Socialismo científico e anarquismo</h3>
+          <p>Marx e Engels (Manifesto Comunista, 1848) analisam a história pela luta de classes, a mais-valia e a exploração do operário, e preveem a revolução, a ditadura do proletariado e o comunismo. Os anarquistas (Proudhon, Bakunin, Kropotkin) querem abolir o Estado e rejeitam até o Estado transitório, o que levou Bakunin a romper com Marx na Primeira Internacional.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. Nacionalismo</h3>
+          <p>Defende que povos com língua, história e cultura comuns formem um Estado próprio. O Congresso de Viena (1815) ignorou essas aspirações, o que estimulou revoltas como a Primavera dos Povos (1848). A Itália se unificou até 1870 (Cavour e Piemonte-Sardenha) e a Alemanha em 1871 (Bismarck e a Prússia). O nacionalismo exacerbado alimentou rivalidades que levaram à Primeira Guerra.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "Ideologias do Século XIX".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/20</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no conteúdo <strong>"Ideologias do Século XIX"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "liberalismo",
+    "question": "Qual é a ideia central do liberalismo clássico no século XIX?",
+    "options": [
+      "A) Controle estatal da economia e dos preços de mercado",
+      "B) Defesa das liberdades individuais e de um Estado limitado",
+      "C) Fim da propriedade privada e dos meios de produção",
+      "D) Obediência total dos súditos ao rei e à nobreza local"
+    ],
+    "answer": 1,
+    "comment": "O liberalismo nasceu do Iluminismo e das revoluções burguesas (Inglesa, Americana e Francesa). Defendia liberdade individual, propriedade privada, igualdade perante a lei e governo limitado por uma constituição."
+  },
+  {
+    "id": 2,
+    "topic": "liberalismo",
+    "question": "Que ideia econômica é ligada a Adam Smith e ao liberalismo?",
+    "options": [
+      "A) Planejamento central da produção feito pelo governo",
+      "B) Monopólio do comércio exterior nas mãos do monarca",
+      "C) Propriedade coletiva de todas as fábricas e terras",
+      "D) Livre mercado, em que a concorrência regula a economia"
+    ],
+    "answer": 3,
+    "comment": "Em A Riqueza das Nações (1776), Smith defendeu o livre mercado e a \"mão invisível\", com pouca intervenção do Estado (laissez-faire). Era uma crítica ao mercantilismo, que dependia de monopólios e regras estatais."
+  },
+  {
+    "id": 3,
+    "topic": "liberalismo",
+    "question": "Qual pensador defendeu a separação dos poderes do Estado?",
+    "options": [
+      "A) Montesquieu, autor da obra O Espírito das Leis",
+      "B) Karl Marx, autor de O Capital e de outras obras",
+      "C) Bakunin, autor de Deus e o Estado e outras obras",
+      "D) Bismarck, líder da unificação da Alemanha em 1871"
+    ],
+    "answer": 0,
+    "comment": "Montesquieu propôs dividir o poder em Executivo, Legislativo e Judiciário, para que um limitasse o outro e evitasse o absolutismo. Essa ideia é base do liberalismo político e das constituições modernas."
+  },
+  {
+    "id": 4,
+    "topic": "liberalismo",
+    "question": "Segundo John Locke, quais direitos naturais o Estado deve proteger?",
+    "options": [
+      "A) Trabalho, moradia e alimentação garantidos a todos",
+      "B) Fé, tradição e obediência ao governante do lugar",
+      "C) Vida, liberdade e propriedade de cada indivíduo",
+      "D) Igualdade de renda, de terras e de bens materiais"
+    ],
+    "answer": 2,
+    "comment": "Locke defendia que os direitos à vida, à liberdade e à propriedade são anteriores ao Estado, e que o governo existe para protegê-los. Se violar esses direitos, perde sua legitimidade."
+  },
+  {
+    "id": 5,
+    "topic": "liberalismo",
+    "question": "Qual foi um efeito social do liberalismo econômico sem regulação na indústria?",
+    "options": [
+      "A) Concentração de riqueza e piora das condições operárias",
+      "B) Redução imediata das jornadas e aumento dos salários",
+      "C) Fim das fábricas e retorno geral ao trabalho rural",
+      "D) Retorno do poder político à antiga nobreza feudal"
+    ],
+    "answer": 0,
+    "comment": "Com pouca regulação, a Revolução Industrial trouxe jornadas de 12 a 16 horas, trabalho infantil, baixos salários e cortiços. Esse quadro alimentou as críticas socialistas e anarquistas ao capitalismo."
+  },
+  {
+    "id": 6,
+    "topic": "socialismo",
+    "question": "Quem são os principais formuladores do socialismo científico?",
+    "options": [
+      "A) Saint-Simon e Fourier, criadores do socialismo utópico",
+      "B) Marx e Engels, autores do Manifesto Comunista (1848)",
+      "C) Locke e Montesquieu, teóricos do liberalismo político",
+      "D) Cavour e Garibaldi, líderes da unificação italiana"
+    ],
+    "answer": 1,
+    "comment": "Karl Marx e Friedrich Engels publicaram o Manifesto Comunista em 1848, ano da Primavera dos Povos. Marx escreveu depois O Capital (1867), obra que analisa o funcionamento do capitalismo."
+  },
+  {
+    "id": 7,
+    "topic": "socialismo",
+    "question": "Qual é a ideia central do materialismo histórico?",
+    "options": [
+      "A) A história avança pela vontade de grandes heróis",
+      "B) A história avança pelos desígnios de Deus e da Igreja",
+      "C) A história avança pela luta entre classes sociais",
+      "D) A história é só um ciclo repetido sem mudanças reais"
+    ],
+    "answer": 2,
+    "comment": "Para Marx e Engels, \"a história de toda sociedade até hoje é a história da luta de classes\". As mudanças históricas vêm das condições materiais e do conflito entre grupos, como burgueses e proletários."
+  },
+  {
+    "id": 8,
+    "topic": "socialismo",
+    "question": "O que Marx chamou de mais-valia?",
+    "options": [
+      "A) Parte do trabalho não paga que fica com o patrão",
+      "B) Imposto cobrado pelo Estado sobre o lucro das fábricas",
+      "C) Aumento de salário dado ao operário mais produtivo",
+      "D) Valor da terra que sobe com a chegada da ferrovia"
+    ],
+    "answer": 0,
+    "comment": "A mais-valia é a diferença entre o valor que o trabalhador produz e o salário que recebe. Segundo Marx, o capitalista se apropria dessa diferença, e essa é a base da exploração do operário."
+  },
+  {
+    "id": 9,
+    "topic": "socialismo",
+    "question": "Por que Marx e Engels chamaram seu socialismo de \"científico\"?",
+    "options": [
+      "A) Por ser ensinado apenas em laboratórios e universidades",
+      "B) Por analisar as contradições históricas do capitalismo",
+      "C) Por exigir experimentos de laboratório nas fábricas",
+      "D) Por confiar apenas na bondade dos patrões e do clero"
+    ],
+    "answer": 1,
+    "comment": "Eles criticaram os socialistas utópicos (Owen, Fourier, Saint-Simon), que sonhavam com comunidades ideais e confiavam na boa vontade dos ricos. O socialismo científico estuda as leis da história e aposta na ação do proletariado."
+  },
+  {
+    "id": 10,
+    "topic": "socialismo",
+    "question": "Segundo o marxismo, qual é o objetivo final da revolução proletária?",
+    "options": [
+      "A) Um capitalismo sem greves e com salários sempre fixos",
+      "B) Uma monarquia absoluta controlada pelos sindicatos",
+      "C) Uma república de pequenos proprietários de terra",
+      "D) Uma sociedade sem classes e sem exploração, o comunismo"
+    ],
+    "answer": 3,
+    "comment": "O marxismo prevê a revolução dos proletários, um período de transição (ditadura do proletariado) e, por fim, o comunismo, sem classes e, ao final, sem Estado. A propriedade dos meios de produção seria coletiva."
+  },
+  {
+    "id": 11,
+    "topic": "anarquismo",
+    "question": "Qual é a principal proposta do anarquismo?",
+    "options": [
+      "A) Fortalecer o Estado para planejar toda a economia",
+      "B) Abolir o Estado e organizar a vida por associação livre",
+      "C) Defender a monarquia como garantia da ordem social",
+      "D) Entregar o poder a um único líder muito carismático"
+    ],
+    "answer": 1,
+    "comment": "Os anarquistas rejeitam toda autoridade imposta, como Estado, patrões e Igreja. Defendem uma sociedade de comunidades livres, baseada em cooperação, igualdade e liberdade individual."
+  },
+  {
+    "id": 12,
+    "topic": "anarquismo",
+    "question": "Qual crítica Proudhon fez à propriedade privada?",
+    "options": [
+      "A) Defendeu a propriedade como direito sagrado e absoluto",
+      "B) Propôs que o Estado fosse dono de todas as terras",
+      "C) Afirmou que a propriedade concentrada era um roubo",
+      "D) Pediu que os ricos doassem metade da renda à Igreja"
+    ],
+    "answer": 2,
+    "comment": "Em O que é a propriedade? (1840), Pierre-Joseph Proudhon declarou: \"A propriedade é um roubo\", criticando a renda de quem vive do trabalho alheio. Ele é considerado um dos pais do anarquismo."
+  },
+  {
+    "id": 13,
+    "topic": "anarquismo",
+    "question": "Qual divergência separou Bakunin e Marx na Primeira Internacional?",
+    "options": [
+      "A) Bakunin recusava qualquer Estado, mesmo o transitório",
+      "B) Bakunin defendia a monarquia e Marx defendia a república",
+      "C) Bakunin apoiava o livre mercado e Marx, o monopólio",
+      "D) Bakunin era contra os operários e Marx a favor deles"
+    ],
+    "answer": 0,
+    "comment": "Na Associação Internacional dos Trabalhadores (1864), Bakunin criticava a ideia marxista de um Estado operário transitório, achando que ele viraria nova tirania. A ruptura levou à expulsão de Bakunin em 1872."
+  },
+  {
+    "id": 14,
+    "topic": "anarquismo",
+    "question": "Que ideia o anarquista Kropotkin defendeu em Apoio Mútuo?",
+    "options": [
+      "A) A competição entre os fortes como única lei natural",
+      "B) O egoísmo do indivíduo como base da vida em grupo",
+      "C) A autoridade do chefe como garantia da ordem social",
+      "D) Cooperação e ajuda mútua como força da evolução social"
+    ],
+    "answer": 3,
+    "comment": "Piotr Kropotkin argumentou que, na natureza e na sociedade, a cooperação é tão importante quanto a competição. Essa ideia sustenta a proposta anarquista de uma sociedade sem Estado, apoiada na solidariedade."
+  },
+  {
+    "id": 15,
+    "topic": "anarquismo",
+    "question": "Qual método de luta o anarcossindicalismo valorizava?",
+    "options": [
+      "A) Disputa eleitoral e criação de grandes partidos políticos",
+      "B) Negociação reservada com o rei e com a nobreza",
+      "C) Ação direta dos trabalhadores, como a greve geral",
+      "D) Aliança militar com os exércitos dos Estados vizinhos"
+    ],
+    "answer": 2,
+    "comment": "O anarcossindicalismo, forte no fim do século XIX e início do XX, usava sindicatos, greves e boicotes, sem passar por partidos ou eleições. A greve geral era a principal arma para derrubar o capitalismo."
+  },
+  {
+    "id": 16,
+    "topic": "nacionalismo",
+    "question": "Qual é a ideia central do nacionalismo do século XIX?",
+    "options": [
+      "A) Povos de língua e história comuns merecem Estado próprio",
+      "B) Todos os povos devem se submeter a um único império",
+      "C) As fronteiras nacionais devem ser abolidas por completo",
+      "D) Cada região deve ser governada apenas pela Igreja"
+    ],
+    "answer": 0,
+    "comment": "O nacionalismo defende que a identidade comum (língua, cultura, história) deve gerar um Estado nacional. Inspirou a Primavera dos Povos de 1848 e as unificações da Itália e da Alemanha."
+  },
+  {
+    "id": 17,
+    "topic": "nacionalismo",
+    "question": "Como o Congresso de Viena (1815) tratou as aspirações nacionais?",
+    "options": [
+      "A) Reconheceu a independência de todas as nações europeias",
+      "B) Restaurou monarquias e ignorou as aspirações nacionais",
+      "C) Criou a Alemanha e a Itália como Estados unificados",
+      "D) Aboliu todas as monarquias e criou várias repúblicas"
+    ],
+    "answer": 1,
+    "comment": "Liderado por Metternich, o Congresso buscava restaurar a ordem anterior a Napoleão (legitimidade e equilíbrio entre as potências) e ignorou o desejo dos povos por autonomia. Isso alimentou revoltas e movimentos nacionalistas."
+  },
+  {
+    "id": 18,
+    "topic": "nacionalismo",
+    "question": "Que Estado liderou a unificação italiana, concluída em 1870?",
+    "options": [
+      "A) O Reino da Prússia, com Bismarck e o rei Guilherme I",
+      "B) O Império Austríaco, com Metternich e Francisco I",
+      "C) O Reino da França, com Napoleão III e Haussmann",
+      "D) O Piemonte-Sardenha, com Cavour e Vítor Emanuel II"
+    ],
+    "answer": 3,
+    "comment": "O Reino do Piemonte-Sardenha, com o primeiro-ministro Cavour e o rei Vítor Emanuel II, comandou o Risorgimento, com a ajuda de Garibaldi. A unificação se completou com a anexação de Roma, em 1870."
+  },
+  {
+    "id": 19,
+    "topic": "nacionalismo",
+    "question": "Como se concluiu a unificação alemã em 1871?",
+    "options": [
+      "A) Sob a Áustria de Metternich, após vencer a Rússia",
+      "B) Sob a Prússia de Bismarck, após vencer a França",
+      "C) Por plebiscito entre todos os povos da Europa Central",
+      "D) Por tratado pacífico entre o papa e os príncipes locais"
+    ],
+    "answer": 1,
+    "comment": "O chanceler Otto von Bismarck, da Prússia, usou guerras (como a Franco-Prussiana, 1870-71) para unir os Estados alemães. O Império Alemão foi proclamado em 1871, no Palácio de Versalhes, sob o rei Guilherme I."
+  },
+  {
+    "id": 20,
+    "topic": "nacionalismo",
+    "question": "Como o nacionalismo exacerbado contribuiu para a crise do início do século XX?",
+    "options": [
+      "A) Alimentou rivalidades e imperialismo, rumo à Primeira Guerra",
+      "B) Eliminou as rivalidades e garantiu a paz na Europa",
+      "C) Substituiu os exércitos por assembleias internacionais",
+      "D) Impediu o crescimento da indústria nos grandes países"
+    ],
+    "answer": 0,
+    "comment": "No fim do século XIX, o nacionalismo virou rivalidade entre potências, corrida armamentista e disputa por colônias (imperialismo). Esse clima, somado a alianças militares e a conflitos nos Bálcãs, levou à Primeira Guerra Mundial."
+  }
+];
+
+    const TOPICS = [{"key": "liberalismo", "name": "Liberalismo"}, {"key": "socialismo", "name": "Socialismo Científico"}, {"key": "anarquismo", "name": "Anarquismo"}, {"key": "nacionalismo", "name": "Nacionalismo"}];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você dominou muito bem o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Revisar o Conteúdo!';
+        subEl.innerText = 'Leia o resumo dos temas, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -7883,7 +8658,8 @@
       { id: 'unha', dataId: 'sim-data-unha', title: 'Unha de Fome', desc: 'Literatura · Interpretação de texto', count: 25, icon: 'pill', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' },
       { id: 'ira', dataId: 'sim-data-ira', title: 'Nem Toda Ira É Justa', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'scale', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
       { id: 'moda', dataId: 'sim-data-moda', title: 'Moda e Arte', desc: 'Artes · Desfile, Cubismo e Croqui', count: 15, icon: 'shirt', color: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400' },
-      { id: 'preg', dataId: 'sim-data-preg', title: 'Preguicite Aguda', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'bed', color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' }
+      { id: 'preg', dataId: 'sim-data-preg', title: 'Preguicite Aguda', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'bed', color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
+      { id: 'ideo', dataId: 'sim-data-ideo', title: 'Ideologias do Século XIX', desc: 'História · Europa no século XIX', count: 20, icon: 'landmark', color: 'bg-red-500/10 text-red-600 dark:text-red-400' }
     ];
 
     function renderChooser() {
