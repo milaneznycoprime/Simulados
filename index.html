@@ -8355,6 +8355,847 @@
 </body>
 </html></script>
 
+  <script type="text/plain" id="sim-data-port"><!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado: Orações Adverbiais e Textos</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://unpkg.com/lucide@latest"><\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407'
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300">
+
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-brand-600 text-white rounded-xl shadow-md shadow-brand-500/25">
+          <i data-lucide="languages" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight">Simulado: Orações Adverbiais e Textos</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">25 Questões com Gabarito Comentado</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="toggleSummaryModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all" title="Resumo do Texto">
+          <i data-lucide="info" class="w-4 h-4 text-brand-500"></i>
+          <span class="hidden md:inline">Resumo dos Temas</span>
+        </button>
+        <div class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-lg text-xs font-medium">
+          <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm">Modo Estudo</button>
+          <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all">Modo Prova</button>
+        </div>
+        <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-all" title="Alternar Tema">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+        <button onclick="confirmFinishExam()" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-lg shadow-md transition-all">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Finalizar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-white dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="w-full md:w-1/2">
+        <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4 text-brand-500"></i>
+            Progresso Geral: <strong id="progress-text" class="text-slate-900 dark:text-white">0 / 25 (0%)</strong>
+          </span>
+          <span id="score-text" class="text-emerald-600 dark:text-emerald-400 font-semibold">Acertos: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden flex">
+          <div id="progress-bar" class="bg-brand-500 h-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4">
+        <div class="flex items-center bg-slate-100 dark:bg-slate-700 p-1 rounded-xl text-xs font-medium">
+          <button id="view-single-btn" onclick="setViewMode('single')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all">
+            <i data-lucide="square" class="w-3.5 h-3.5"></i><span>Por Questão</span>
+          </button>
+          <button id="view-list-btn" onclick="setViewMode('list')" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i><span>Lista Completa</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-600">
+          <i data-lucide="clock" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+          <span id="timer-display" class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200">00:00</span>
+          <button onclick="toggleTimer()" id="btn-timer-toggle" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ml-1">
+            <i data-lucide="pause" id="timer-icon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div id="topic-filter-bar" class="hidden mb-6 flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Filtrar Tópico:</span>
+      <button onclick="filterByTopic('all')" class="topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all" data-topic="all">Todos (25)</button>
+      <button onclick="filterByTopic('adverbial')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="adverbial">Oração Adverbial (5)</button>
+      <button onclick="filterByTopic('reduzida')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="reduzida">Adverbial Reduzida (5)</button>
+      <button onclick="filterByTopic('porques')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="porques">Tipos de Porquê (5)</button>
+      <button onclick="filterByTopic('carta')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="carta">Carta de Reclamação (5)</button>
+      <button onclick="filterByTopic('interp')" class="topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all" data-topic="interp">Interpretação de Texto (5)</button>
+    </div>
+
+    <div id="single-question-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="lg:col-span-3">
+        <div id="active-card" class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between min-h-[480px]"></div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 sticky top-24">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i data-lucide="grid" class="w-4 h-4 text-brand-500"></i>
+              Navegador (1-25)
+            </h3>
+            <span class="text-xs text-slate-500" id="flagged-count-badge">0 Marcadas</span>
+          </div>
+          <div id="grid-navigator" class="grid grid-cols-5 gap-2 mb-6"></div>
+          <div class="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs text-slate-600 dark:text-slate-400">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600"></span><span>Pendente</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-brand-500"></span><span>Respondida</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-amber-500"></span><span>Revisão</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-questions-container" class="hidden space-y-6"></div>
+  </main>
+
+  <div id="summary-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-800/80">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+          <h2 class="font-bold text-lg text-slate-900 dark:text-white">Resumo: Orações Adverbiais e Textos</h2>
+        </div>
+        <button onclick="toggleSummaryModal()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-brand-600 dark:text-brand-400 text-base mb-2">1. Orações adverbiais e reduzidas</h3>
+          <p><b>Tipos:</b> causal (porque, já que), consecutiva (tão... que), condicional (se, caso), concessiva (embora, ainda que), comparativa (como, que nem), conformativa (conforme, segundo), final (para que), proporcional (à medida que) e temporal (quando, assim que). As <b>reduzidas</b> têm verbo no infinitivo, gerúndio ou particípio e não têm conectivo: "Ao chegar" = "Quando chegou".</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-purple-600 dark:text-purple-400 text-base mb-2">2. Tipos de porquê</h3>
+          <p><b>Por que</b>: início de pergunta ou "pelo qual". <b>Porque</b>: conjunção, usada em respostas (= pois). <b>Por quê</b>: no fim da frase, antes de pontuação. <b>Porquê</b>: substantivo (o motivo), com artigo ou outro determinante.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/60">
+          <h3 class="font-bold text-emerald-600 dark:text-emerald-400 text-base mb-2">3. Carta de reclamação e interpretação</h3>
+          <p>A carta de reclamação expõe uma insatisfação e pede solução, em linguagem formal, com local e data, vocativo, descrição do problema, pedido, despedida e assinatura. Na interpretação, é preciso ler o que está explícito e o que se infere, notar o sentido figurado e separar fatos de opiniões.</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end">
+        <button onclick="toggleSummaryModal()" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium text-sm transition-all">Entendi, voltar às questões</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden my-8">
+      <div id="result-header-bg" class="p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative">
+        <div class="inline-flex p-4 rounded-2xl bg-white/10 backdrop-blur-md mb-3 border border-white/20">
+          <i id="result-badge-icon" data-lucide="award" class="w-12 h-12 text-amber-300"></i>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold mb-1">Resultado do Simulado</h2>
+        <p id="result-subtitle" class="text-brand-100 text-sm">Confira seu desempenho sobre "Orações Adverbiais e Textos".</p>
+      </div>
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Pontuação</span>
+            <p id="res-score" class="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">0/25</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Aproveitamento</span>
+            <p id="res-percent" class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">0%</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-500 font-semibold uppercase">Tempo Total</span>
+            <p id="res-time" class="text-2xl sm:text-3xl font-black text-amber-600 dark:text-amber-400">00:00</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm mb-3">Aproveitamento por Tópico:</h3>
+          <div id="topic-breakdown-container" class="space-y-3"></div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3">
+          <button onclick="restartQuiz()" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Tentar Novamente
+          </button>
+          <button onclick="closeResultsAndReview()" class="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Revisar Respostas
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto">
+    <p>Simulado educativo interativo baseado no conteúdo <strong>"Orações Adverbiais e Textos"</strong>.</p>
+  </footer>
+
+  <script>
+    const questions = [
+  {
+    "id": 1,
+    "topic": "adverbial",
+    "question": "Em \"<b>Embora estivesse cansado</b>, ele terminou o trabalho\", a oração destacada é:",
+    "options": [
+      "A) Subordinada adverbial causal, que indica a causa",
+      "B) Subordinada adverbial final, que indica a finalidade",
+      "C) Subordinada adverbial concessiva, que indica oposição",
+      "D) Subordinada adverbial condicional, que indica condição"
+    ],
+    "answer": 2,
+    "comment": "A oração concessiva expressa um fato contrário ao esperado, que não impede a ação principal: estava cansado, mas terminou. Conjunções típicas: embora, ainda que, mesmo que, apesar de que, conquanto."
+  },
+  {
+    "id": 2,
+    "topic": "adverbial",
+    "question": "Em \"<b>Se chover</b>, o jogo será cancelado\", a oração destacada é:",
+    "options": [
+      "A) Condicional, pois expressa uma condição para o fato",
+      "B) Temporal, pois indica o momento em que o fato ocorre",
+      "C) Causal, pois indica o motivo de o jogo ser cancelado",
+      "D) Proporcional, pois indica um fato que cresce em paralelo"
+    ],
+    "answer": 0,
+    "comment": "A oração condicional indica a condição para a realização do fato principal (o jogo só será cancelado se chover). Conjunções: se, caso, desde que, contanto que, a menos que, salvo se."
+  },
+  {
+    "id": 3,
+    "topic": "adverbial",
+    "question": "Em \"Estudou muito <b>para que passasse no vestibular</b>\", a oração destacada é:",
+    "options": [
+      "A) Consecutiva, pois expressa o resultado da ação principal",
+      "B) Causal, pois expressa a causa da ação principal",
+      "C) Conformativa, pois indica a conformidade da ação principal",
+      "D) Final, pois expressa a finalidade da ação principal"
+    ],
+    "answer": 3,
+    "comment": "A oração final indica o objetivo, a finalidade da ação principal: estudou com o fim de passar. Conjunções: para que, a fim de que, que (no sentido de \"para que\")."
+  },
+  {
+    "id": 4,
+    "topic": "adverbial",
+    "question": "Em \"Chorou <b>tanto que ficou sem voz</b>\", a oração destacada é:",
+    "options": [
+      "A) Concessiva, pois indica uma oposição ao fato principal",
+      "B) Consecutiva, pois indica o efeito de uma intensidade",
+      "C) Comparativa, pois compara a intensidade de duas ações",
+      "D) Temporal, pois indica o tempo em que o choro ocorreu"
+    ],
+    "answer": 1,
+    "comment": "A consecutiva expressa a consequência de um fato intensificado na oração principal (tanto, tão, tamanho, tal... que). Chorou intensamente e, como consequência, ficou sem voz."
+  },
+  {
+    "id": 5,
+    "topic": "adverbial",
+    "question": "Em \"Fiz o bolo <b>conforme a receita indicava</b>\", a oração destacada é:",
+    "options": [
+      "A) Conformativa, pois indica conformidade com a receita",
+      "B) Comparativa, pois estabelece comparação com a receita",
+      "C) Condicional, pois indica a condição para fazer o bolo",
+      "D) Final, pois indica a finalidade de se fazer o bolo"
+    ],
+    "answer": 0,
+    "comment": "A conformativa expressa acordo, conformidade com algo dito ou feito (a receita). Conjunções: conforme, segundo, consoante, como (= conforme)."
+  },
+  {
+    "id": 6,
+    "topic": "reduzida",
+    "question": "Como se reconhece uma oração subordinada adverbial reduzida?",
+    "options": [
+      "A) Verbo sempre no futuro do subjuntivo, com um conectivo",
+      "B) Verbo no infinitivo, gerúndio ou particípio, sem conectivo",
+      "C) Verbo no imperativo, sempre iniciada por uma conjunção",
+      "D) Verbo no pretérito, introduzida por um pronome relativo"
+    ],
+    "answer": 1,
+    "comment": "As orações reduzidas têm o verbo em uma forma nominal (infinitivo, gerúndio ou particípio) e não são introduzidas por conjunção subordinativa nem por pronome relativo. Podem ser desenvolvidas, isto é, reescritas com conectivo."
+  },
+  {
+    "id": 7,
+    "topic": "reduzida",
+    "question": "Em \"<b>Ao chegar em casa</b>, tomou banho\", a oração é:",
+    "options": [
+      "A) Causal reduzida de gerúndio (= Porque chegou em casa)",
+      "B) Final reduzida de particípio (= Para que chegue em casa)",
+      "C) Temporal reduzida de infinitivo (= Quando chegou)",
+      "D) Condicional reduzida de infinitivo (= Se chegar em casa)"
+    ],
+    "answer": 2,
+    "comment": "\"Ao\" + infinitivo costuma indicar tempo: Ao chegar equivale a \"Quando chegou\". O verbo está no infinitivo e não há conjunção subordinativa, por isso é reduzida."
+  },
+  {
+    "id": 8,
+    "topic": "reduzida",
+    "question": "Em \"<b>Terminado o trabalho</b>, saímos\", a oração é:",
+    "options": [
+      "A) Causal reduzida de infinitivo (= Porque terminou o trabalho)",
+      "B) Final reduzida de gerúndio (= Para que terminasse o trabalho)",
+      "C) Concessiva reduzida de gerúndio (= Embora terminasse o trabalho)",
+      "D) Temporal reduzida de particípio (= Quando o trabalho terminou)"
+    ],
+    "answer": 3,
+    "comment": "\"Terminado\" é particípio. A oração indica o momento da saída (depois que o trabalho terminou), portanto é temporal reduzida de particípio."
+  },
+  {
+    "id": 9,
+    "topic": "reduzida",
+    "question": "Em \"<b>Estudando bastante</b>, você passará\", a oração equivale a:",
+    "options": [
+      "A) Condicional reduzida de gerúndio (= Se estudar bastante)",
+      "B) Causal reduzida de gerúndio (= Porque estudou bastante)",
+      "C) Final reduzida de infinitivo (= Para que estude bastante)",
+      "D) Concessiva reduzida de gerúndio (= Embora estude bastante)"
+    ],
+    "answer": 0,
+    "comment": "O verbo está no gerúndio e a ideia é de condição: você passará se estudar bastante. A forma nominal sozinha não diz o valor da oração, então é preciso ler o sentido da frase."
+  },
+  {
+    "id": 10,
+    "topic": "reduzida",
+    "question": "Em \"<b>Por ter faltado</b>, perdeu a prova\", a oração indica:",
+    "options": [
+      "A) Tempo, por ser reduzida de infinitivo (= Quando faltou)",
+      "B) Causa, por ser reduzida de infinitivo (= Porque faltou)",
+      "C) Finalidade, por ser reduzida de infinitivo (= Para faltar)",
+      "D) Concessão, por ser reduzida de gerúndio (= Embora faltando)"
+    ],
+    "answer": 1,
+    "comment": "\"Por ter faltado\" (infinitivo) expressa o motivo de ter perdido a prova: porque faltou. É uma causal reduzida de infinitivo."
+  },
+  {
+    "id": 11,
+    "topic": "porques",
+    "question": "Complete: \"____ você não foi à aula ontem?\"",
+    "options": [
+      "A) Porque, junto, pois dá uma explicação na pergunta",
+      "B) Por que, separado, pois inicia uma pergunta direta",
+      "C) Por quê, separado e com acento, no fim da pergunta",
+      "D) Porquê, junto e com acento, como substantivo comum"
+    ],
+    "answer": 1,
+    "comment": "No início de perguntas diretas e indiretas, usa-se \"por que\" (separado e sem acento), equivalente a \"por qual motivo\"."
+  },
+  {
+    "id": 12,
+    "topic": "porques",
+    "question": "Complete: \"Não fui à aula ____ estava doente.\"",
+    "options": [
+      "A) Por que, separado, pois inicia uma pergunta direta",
+      "B) Porquê, junto e com acento, pois é um substantivo",
+      "C) Por quê, separado e com acento, pois fecha a frase",
+      "D) Porque, junto e sem acento, introduz uma explicação"
+    ],
+    "answer": 3,
+    "comment": "\"Porque\" (junto e sem acento) é conjunção causal ou explicativa e é usado nas respostas, equivalendo a \"pois\" ou \"já que\"."
+  },
+  {
+    "id": 13,
+    "topic": "porques",
+    "question": "Complete: \"Você não vai à festa? ____?\"",
+    "options": [
+      "A) Por quê, separado e com acento, antes da pontuação",
+      "B) Porque, junto e sem acento, pois é uma conjunção",
+      "C) Por que, separado e sem acento, como nas perguntas",
+      "D) Porquê, junto e com acento, pois é um substantivo"
+    ],
+    "answer": 0,
+    "comment": "No fim da frase, antes de ponto final, de interrogação ou de exclamação, usa-se \"por quê\" (separado e com acento no ê)."
+  },
+  {
+    "id": 14,
+    "topic": "porques",
+    "question": "Complete: \"Ninguém entendeu o ____ da briga.\"",
+    "options": [
+      "A) Porque, junto e sem acento, pois funciona como conjunção",
+      "B) Por que, separado e sem acento, pois inicia a pergunta",
+      "C) Porquê, junto e com acento, pois é um substantivo",
+      "D) Por quê, separado e com acento, pois está no fim da frase"
+    ],
+    "answer": 2,
+    "comment": "\"Porquê\" é substantivo, equivale a \"o motivo\" e costuma vir acompanhado de artigo, pronome ou outro determinante (o porquê, um porquê). Admite plural: os porquês."
+  },
+  {
+    "id": 15,
+    "topic": "porques",
+    "question": "Em \"Este é o motivo ____ não saí de casa\", usa-se:",
+    "options": [
+      "A) Porque, junto, pois liga duas orações explicativas",
+      "B) Por que, separado, com o sentido de \"pelo qual\"",
+      "C) Porquê, junto e com acento, pois vem após o artigo",
+      "D) Por quê, separado e com acento, no fim da pergunta"
+    ],
+    "answer": 1,
+    "comment": "Quando \"por que\" equivale a \"pelo qual\" (pronome relativo, com a preposição \"por\"), escreve-se separado e sem acento: o motivo pelo qual não saí."
+  },
+  {
+    "id": 16,
+    "topic": "carta",
+    "question": "Qual é a principal finalidade de uma carta de reclamação?",
+    "options": [
+      "A) Contar novidades pessoais a um amigo que mora longe",
+      "B) Divulgar um produto novo para atrair mais compradores",
+      "C) Expor uma insatisfação e pedir a solução do problema",
+      "D) Convidar o leitor para um evento social da empresa"
+    ],
+    "answer": 2,
+    "comment": "A carta de reclamação mostra ao destinatário (empresa ou órgão) um problema com um produto ou serviço, descreve a situação e pede uma providência. Tem caráter argumentativo e formal."
+  },
+  {
+    "id": 17,
+    "topic": "carta",
+    "question": "Que tipo de linguagem predomina em uma carta de reclamação?",
+    "options": [
+      "A) Formal, educada e objetiva, sem gírias nem agressões",
+      "B) Informal, com gírias e abreviações de mensagens rápidas",
+      "C) Poética, com muitas metáforas, rimas e figuras de som",
+      "D) Agressiva, com insultos para pressionar o destinatário"
+    ],
+    "answer": 0,
+    "comment": "Como é dirigida a uma empresa ou instituição, a carta usa norma culta, tom respeitoso e clareza. A educação e a objetividade aumentam a chance de a reclamação ser atendida."
+  },
+  {
+    "id": 18,
+    "topic": "carta",
+    "question": "Qual é a ordem mais adequada dos elementos de uma carta de reclamação?",
+    "options": [
+      "A) Assinatura, pedido, vocativo, problema e local e data",
+      "B) Local e data, vocativo, problema, pedido e assinatura",
+      "C) Problema, local e data, assinatura, pedido e vocativo",
+      "D) Pedido, vocativo, assinatura, problema e local e data"
+    ],
+    "answer": 1,
+    "comment": "A estrutura usual é: local e data; vocativo (destinatário); corpo, com a descrição do problema, a argumentação e o pedido de solução; despedida; e assinatura do remetente."
+  },
+  {
+    "id": 19,
+    "topic": "carta",
+    "question": "Qual trecho combina com o corpo de uma carta de reclamação?",
+    "options": [
+      "A) \"Venho registrar minha insatisfação com o atendimento.\"",
+      "B) \"E aí, pessoal, vocês não vão acreditar no que rolou!\"",
+      "C) \"Prezados amigos, vamos comemorar o fim do ano juntos.\"",
+      "D) \"Comunico o resultado do sorteio realizado na loja.\""
+    ],
+    "answer": 0,
+    "comment": "O trecho está na 1ª pessoa, em linguagem formal, e apresenta o motivo da carta (a insatisfação). Os outros são informais ou têm outra finalidade, como convite ou comunicado."
+  },
+  {
+    "id": 20,
+    "topic": "carta",
+    "question": "Qual despedida é adequada a uma carta de reclamação?",
+    "options": [
+      "A) \"Beijos e até logo!\", seguida de carinhas sorridentes",
+      "B) \"Tchau, galera!\", seguida de um apelido do remetente",
+      "C) \"Atenciosamente,\", seguida do nome completo do autor",
+      "D) \"Fiquem com Deus!\", sem nenhuma assinatura ao final"
+    ],
+    "answer": 2,
+    "comment": "O fecho deve ser formal (Atenciosamente, Cordialmente, Respeitosamente) e seguido da assinatura. A identificação do autor permite à empresa responder e dá validade à carta."
+  },
+  {
+    "id": 21,
+    "topic": "interp",
+    "question": "\"O prefeito prometeu asfaltar a rua antes das eleições, mas, passado o pleito, o buraco só aumentou.\" O que o trecho sugere?",
+    "options": [
+      "A) Que a rua foi asfaltada logo depois das eleições",
+      "B) Que a promessa feita na campanha não foi cumprida",
+      "C) Que o prefeito resolveu todos os problemas do bairro",
+      "D) Que os moradores pediram a construção de um parque"
+    ],
+    "answer": 1,
+    "comment": "O \"mas\" mostra oposição entre a promessa e a realidade. \"Passado o pleito\" (depois da eleição), o buraco só aumentou, ou seja, a promessa não foi cumprida."
+  },
+  {
+    "id": 22,
+    "topic": "interp",
+    "question": "\"Sem o celular, Lia passou horas na janela e notou uma árvore florida que sempre estivera ali.\" Pode-se concluir que:",
+    "options": [
+      "A) Lia plantou a árvore florida na manhã daquele dia",
+      "B) Lia ficou triste por ter perdido o celular na rua",
+      "C) Lia não gosta de árvores e evita olhar a janela",
+      "D) Sem a distração, Lia passou a notar o que ignorava"
+    ],
+    "answer": 3,
+    "comment": "A árvore \"sempre estivera ali\", mas Lia só a viu quando ficou sem o celular. É uma inferência: a distração do aparelho a impedia de reparar no que havia à sua volta."
+  },
+  {
+    "id": 23,
+    "topic": "interp",
+    "question": "\"Ao ver a nota baixa, Pedro ficou uma fera.\" Qual é o sentido de \"fera\" no trecho?",
+    "options": [
+      "A) Sentido figurado, indicando que ele ficou irritado",
+      "B) Sentido literal, indicando que Pedro virou um animal",
+      "C) Sentido figurado, indicando que ele ficou muito feliz",
+      "D) Sentido literal, indicando que ele foi a um zoológico"
+    ],
+    "answer": 0,
+    "comment": "A expressão \"ficar uma fera\" é uma metáfora: compara a raiva de Pedro à de um animal feroz. Nesse caso, a palavra está em sentido figurado, e o contexto (nota baixa) confirma a irritação."
+  },
+  {
+    "id": 24,
+    "topic": "interp",
+    "question": "\"A cigarra cantou todo o verão, enquanto a formiga juntava comida. No inverno, a cigarra passou fome.\" Qual é a mensagem?",
+    "options": [
+      "A) Cantar durante o verão é sempre o melhor caminho",
+      "B) As formigas são mais felizes do que as cigarras",
+      "C) É preciso se preparar hoje para enfrentar o futuro",
+      "D) Ninguém deve ajudar quem passa necessidade no frio"
+    ],
+    "answer": 2,
+    "comment": "A fábula contrasta a cigarra, que não se preparou, com a formiga previdente. A moral é a importância do trabalho e do planejamento para os tempos difíceis."
+  },
+  {
+    "id": 25,
+    "topic": "interp",
+    "question": "Qual das frases a seguir expressa uma opinião, e não um fato?",
+    "options": [
+      "A) \"O filme estreou nos cinemas no mês de março.\"",
+      "B) \"Este é, sem dúvida, o filme mais chato do ano.\"",
+      "C) \"O filme tem duas horas e dez minutos de duração.\"",
+      "D) \"O diretor do filme nasceu em um país europeu.\""
+    ],
+    "answer": 1,
+    "comment": "A opinião traz um julgamento pessoal, como \"mais chato\" e \"sem dúvida\", e pode variar de pessoa para pessoa. Os fatos (data, duração, nascimento) podem ser verificados."
+  }
+];
+
+    const TOPICS = [{"key": "adverbial", "name": "Oração Adverbial"}, {"key": "reduzida", "name": "Adverbial Reduzida"}, {"key": "porques", "name": "Tipos de Porquê"}, {"key": "carta", "name": "Carta de Reclamação"}, {"key": "interp", "name": "Interpretação de Texto"}];
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    let currentQuestionIndex = 0;
+    let quizMode = 'study';
+    let viewMode = 'single';
+    let userAnswers = {};
+    let flaggedQuestions = {};
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let isExamFinished = false;
+    let currentTopicFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      renderApp();
+      lucide.createIcons();
+    });
+
+    function formatTime(total) {
+      return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    }
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isTimerRunning && !isExamFinished) {
+          timerSeconds++;
+          document.getElementById('timer-display').innerText = formatTime(timerSeconds);
+        }
+      }, 1000);
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timer-icon').setAttribute('data-lucide', isTimerRunning ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function setQuizMode(mode) {
+      quizMode = mode;
+      const on = 'px-2.5 py-1 rounded-md transition-all bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm';
+      const off = 'px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('btn-mode-study').className = mode === 'study' ? on : off;
+      document.getElementById('btn-mode-exam').className = mode === 'exam' ? on : off;
+      renderApp();
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      const on = 'flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow-sm transition-all';
+      const off = 'flex items-center gap-1 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 transition-all';
+      document.getElementById('view-single-btn').className = mode === 'single' ? on : off;
+      document.getElementById('view-list-btn').className = mode === 'list' ? on : off;
+      document.getElementById('single-question-container').classList.toggle('hidden', mode !== 'single');
+      document.getElementById('list-questions-container').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('topic-filter-bar').classList.toggle('hidden', mode !== 'list');
+      renderApp();
+    }
+
+    function filterByTopic(topic) {
+      currentTopicFilter = topic;
+      document.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.className = btn.getAttribute('data-topic') === topic
+          ? 'topic-btn active text-xs px-3 py-1.5 rounded-full border border-brand-500 bg-brand-500 text-white font-medium transition-all'
+          : 'topic-btn text-xs px-3 py-1.5 rounded-full border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all';
+      });
+      renderApp();
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      if (isExamFinished && quizMode === 'exam') return;
+      userAnswers[questionId] = optionIndex;
+      renderApp();
+    }
+    function toggleFlag(questionId) {
+      flaggedQuestions[questionId] = !flaggedQuestions[questionId];
+      renderApp();
+    }
+    function goToQuestion(index) {
+      if (index >= 0 && index < questions.length) {
+        currentQuestionIndex = index;
+        if (viewMode !== 'single') setViewMode('single'); else renderApp();
+      }
+    }
+
+    function renderApp() {
+      updateProgressStats();
+      if (viewMode === 'single') renderSingleQuestionCard(); else renderListMode();
+      renderGridNavigator();
+      lucide.createIcons();
+    }
+
+    function updateProgressStats() {
+      const total = questions.length;
+      const answered = Object.keys(userAnswers).length;
+      const percent = Math.round((answered / total) * 100);
+      let correct = 0, incorrect = 0;
+      for (const qId in userAnswers) {
+        const q = questions.find(item => item.id == qId);
+        if (q && userAnswers[qId] === q.answer) correct++; else if (q) incorrect++;
+      }
+      document.getElementById('progress-text').innerText = answered + ' / ' + total + ' (' + percent + '%)';
+      const showScore = quizMode === 'study' || isExamFinished;
+      const scoreEl = document.getElementById('score-text');
+      scoreEl.innerText = 'Acertos: ' + correct;
+      scoreEl.style.display = showScore ? 'inline' : 'none';
+      document.getElementById('progress-bar').style.width = (showScore ? (correct / total) * 100 : percent) + '%';
+      document.getElementById('progress-bar-incorrect').style.width = (showScore ? (incorrect / total) * 100 : 0) + '%';
+      const flagged = Object.values(flaggedQuestions).filter(Boolean).length;
+      document.getElementById('flagged-count-badge').innerText = flagged + ' Marcadas';
+    }
+
+    function optionsMarkup(q, compact) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      let html = '';
+      q.options.forEach((opt, idx) => {
+        let cls = 'w-full text-left ' + (compact ? 'p-3' : 'p-3.5') + ' rounded-xl border transition-all text-sm sm:text-base flex items-center justify-between gap-2 ';
+        if (showFeedback) {
+          if (idx === q.answer) cls += 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium';
+          else if (selected === idx) cls += 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-200';
+          else cls += 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 opacity-60';
+        } else if (selected === idx) {
+          cls += 'bg-brand-50 dark:bg-brand-950/40 border-brand-500 text-brand-900 dark:text-brand-100 font-medium shadow-sm';
+        } else {
+          cls += 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+        }
+        const icon = showFeedback && idx === q.answer ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 shrink-0"></i>'
+          : (showFeedback && selected === idx ? '<i data-lucide="x-circle" class="w-5 h-5 text-rose-600 shrink-0"></i>' : '');
+        html += '<button onclick="selectAnswer(' + q.id + ',' + idx + ')" class="' + cls + '"><span>' + opt + '</span>' + icon + '</button>';
+      });
+      return html;
+    }
+
+    function commentMarkup(q) {
+      const selected = userAnswers[q.id];
+      const showFeedback = (quizMode === 'study' && selected !== undefined) || isExamFinished;
+      if (!showFeedback) return '';
+      if (selected === undefined) {
+        return '<div class="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">' +
+          '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="help-circle" class="w-4 h-4"></i><span>Não respondida. Gabarito: ' + LETTERS[q.answer] + '</span></div>' +
+          '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+      }
+      const ok = selected === q.answer;
+      return '<div class="mt-6 p-4 rounded-xl ' + (ok ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200') + '">' +
+        '<div class="flex items-center gap-2 font-bold text-sm mb-1"><i data-lucide="' + (ok ? 'check-circle-2' : 'alert-circle') + '" class="w-4 h-4"></i><span>' + (ok ? 'Resposta Correta!' : 'Resposta Incorreta. Gabarito: ' + LETTERS[q.answer]) + '</span></div>' +
+        '<p class="text-xs sm:text-sm leading-relaxed">' + q.comment + '</p></div>';
+    }
+
+    function flagBtn(q) {
+      const f = flaggedQuestions[q.id] || false;
+      return '<button onclick="toggleFlag(' + q.id + ')" class="flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-lg border transition-all ' +
+        (f ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600') +
+        '"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i><span>' + (f ? 'Marcada' : 'Marcar') + '</span></button>';
+    }
+
+    function renderSingleQuestionCard() {
+      const q = questions[currentQuestionIndex];
+      const last = questions.length - 1;
+      document.getElementById('active-card').innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between mb-4">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (currentQuestionIndex + 1) + ' de ' + questions.length + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-6 leading-relaxed">' + q.question + '</h2>' +
+          '<div class="space-y-3">' + optionsMarkup(q, false) + '</div>' +
+          commentMarkup(q) +
+        '</div>' +
+        '<div class="flex items-center justify-between pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex - 1) + ')" ' + (currentQuestionIndex === 0 ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Anterior</span></button>' +
+          '<span class="text-xs text-slate-400 font-medium">' + (currentQuestionIndex + 1) + ' / ' + questions.length + '</span>' +
+          '<button onclick="goToQuestion(' + (currentQuestionIndex + 1) + ')" ' + (currentQuestionIndex === last ? 'disabled' : '') + ' class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-600 hover:bg-brand-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 transition-all shadow-sm"><span>Próxima</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>' +
+        '</div>';
+    }
+
+    function renderGridNavigator() {
+      let html = '';
+      questions.forEach((q, idx) => {
+        const answered = userAnswers[q.id] !== undefined;
+        const flagged = flaggedQuestions[q.id];
+        const current = currentQuestionIndex === idx && viewMode === 'single';
+        let cls = 'h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-all border ';
+        if (current) cls += 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 ';
+        if (answered) cls += 'bg-brand-500 text-white border-brand-600 shadow-sm';
+        else if (flagged) cls += 'bg-amber-500 text-white border-amber-600';
+        else cls += 'bg-slate-100 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200';
+        html += '<button onclick="goToQuestion(' + idx + ')" class="' + cls + '">' + (idx + 1) + '</button>';
+      });
+      document.getElementById('grid-navigator').innerHTML = html;
+    }
+
+    function renderListMode() {
+      const filtered = currentTopicFilter === 'all' ? questions : questions.filter(q => q.topic === currentTopicFilter);
+      let html = '';
+      filtered.forEach(q => {
+        const realIdx = questions.findIndex(item => item.id === q.id);
+        html += '<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex items-center justify-between mb-3">' +
+            '<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800">Questão ' + (realIdx + 1) + '</span>' +
+            flagBtn(q) +
+          '</div>' +
+          '<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-relaxed">' + q.question + '</h3>' +
+          '<div class="space-y-2.5">' + optionsMarkup(q, true) + '</div>' +
+          commentMarkup(q) +
+        '</div>';
+      });
+      document.getElementById('list-questions-container').innerHTML = html;
+    }
+
+    function toggleSummaryModal() {
+      const m = document.getElementById('summary-modal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function confirmFinishExam() {
+      const remaining = questions.length - Object.keys(userAnswers).length;
+      const msg = remaining > 0
+        ? 'Você ainda tem ' + remaining + ' questão(ões) sem resposta. Deseja finalizar mesmo assim?'
+        : 'Deseja realmente finalizar o simulado e ver seu resultado detalhado?';
+      if (confirm(msg)) {
+        isExamFinished = true;
+        isTimerRunning = false;
+        showResultsModal();
+        renderApp();
+      }
+    }
+
+    function showResultsModal() {
+      const total = questions.length;
+      let correct = 0;
+      questions.forEach(q => { if (userAnswers[q.id] === q.answer) correct++; });
+      const percent = Math.round((correct / total) * 100);
+
+      document.getElementById('res-score').innerText = correct + '/' + total;
+      document.getElementById('res-percent').innerText = percent + '%';
+      document.getElementById('res-time').innerText = formatTime(timerSeconds);
+
+      const titleEl = document.getElementById('result-title');
+      const subEl = document.getElementById('result-subtitle');
+      const bg = document.getElementById('result-header-bg');
+      if (percent >= 80) {
+        titleEl.innerText = 'Excelente Desempenho!';
+        subEl.innerText = 'Parabéns! Você dominou muito bem o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-emerald-600 to-teal-700 relative';
+      } else if (percent >= 60) {
+        titleEl.innerText = 'Bom Desempenho!';
+        subEl.innerText = 'Revise as questões incorretas para fixar melhor o conteúdo.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-brand-600 to-rose-700 relative';
+      } else {
+        titleEl.innerText = 'Vale Revisar o Conteúdo!';
+        subEl.innerText = 'Leia o resumo dos temas, revise os comentários e tente novamente.';
+        bg.className = 'p-8 text-center text-white bg-gradient-to-br from-amber-600 to-rose-700 relative';
+      }
+
+      let breakdown = '';
+      TOPICS.forEach(t => {
+        const qs = questions.filter(q => q.topic === t.key);
+        let ok = 0;
+        qs.forEach(q => { if (userAnswers[q.id] === q.answer) ok++; });
+        const p = qs.length ? Math.round((ok / qs.length) * 100) : 0;
+        breakdown += '<div><div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-300 mb-1"><span>' + t.name + ' (' + ok + '/' + qs.length + ')</span><span class="font-bold">' + p + '%</span></div>' +
+          '<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden"><div class="bg-brand-500 h-full transition-all duration-500" style="width:' + p + '%"></div></div></div>';
+      });
+      document.getElementById('topic-breakdown-container').innerHTML = breakdown;
+      const modal = document.getElementById('results-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function hideResults() {
+      const modal = document.getElementById('results-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function closeResultsAndReview() {
+      hideResults();
+      setQuizMode('study');
+    }
+
+    function restartQuiz() {
+      if (confirm('Tem certeza que deseja reiniciar o simulado? Suas respostas serão apagadas.')) {
+        userAnswers = {};
+        flaggedQuestions = {};
+        timerSeconds = 0;
+        isExamFinished = false;
+        isTimerRunning = true;
+        currentQuestionIndex = 0;
+        document.getElementById('timer-display').innerText = '00:00';
+        hideResults();
+        setViewMode('single');
+      }
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+  <\/script>
+</body>
+</html></script>
+
   <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 dark:text-slate-400 mt-auto px-4">
     <p>Os dados ficam salvos somente neste navegador (localStorage). Limpar os dados do site apaga as senhas.</p>
   </footer>
@@ -8659,7 +9500,8 @@
       { id: 'ira', dataId: 'sim-data-ira', title: 'Nem Toda Ira É Justa', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'scale', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
       { id: 'moda', dataId: 'sim-data-moda', title: 'Moda e Arte', desc: 'Artes · Desfile, Cubismo e Croqui', count: 15, icon: 'shirt', color: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400' },
       { id: 'preg', dataId: 'sim-data-preg', title: 'Preguicite Aguda', desc: 'Literatura · Interpretação de texto', count: 20, icon: 'bed', color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
-      { id: 'ideo', dataId: 'sim-data-ideo', title: 'Ideologias do Século XIX', desc: 'História · Europa no século XIX', count: 20, icon: 'landmark', color: 'bg-red-500/10 text-red-600 dark:text-red-400' }
+      { id: 'ideo', dataId: 'sim-data-ideo', title: 'Ideologias do Século XIX', desc: 'História · Europa no século XIX', count: 20, icon: 'landmark', color: 'bg-red-500/10 text-red-600 dark:text-red-400' },
+      { id: 'port', dataId: 'sim-data-port', title: 'Orações Adverbiais e Textos', desc: 'Português · Orações, porquês e carta', count: 25, icon: 'languages', color: 'bg-sky-500/10 text-sky-600 dark:text-sky-400' }
     ];
 
     function renderChooser() {
